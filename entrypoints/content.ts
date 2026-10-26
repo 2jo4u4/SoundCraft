@@ -25,13 +25,31 @@ export default defineContentScript({
     let cleanupPicker: (() => void) | null = null;
     const detachedMediaElements = new Set<HTMLMediaElement>();
 
+    function isAudible(media: HTMLMediaElement | null): boolean {
+      if (!media) return false;
+      return !media.paused && !media.muted && media.volume > 0;
+    }
+
+    function shouldSwitchMedia(target: HTMLMediaElement): boolean {
+      if (!activeMedia) return true;
+      if (activeMedia === target) return false;
+      // 若當前媒體已暫停，而新媒體正在播放，切換
+      if (activeMedia.paused && !target.paused) return true;
+      // 若當前媒體靜音/無聲，而新媒體正在發聲，優先切換至發聲媒體（解決 Spotify Canvas 靜音影片佔用問題）
+      if (!isAudible(activeMedia) && isAudible(target)) return true;
+      // 依評分比較
+      const targetScore = scoreMedia(target, false);
+      const activeScore = scoreMedia(activeMedia, true);
+      return targetScore > activeScore;
+    }
+
     // 攔截 HTMLMediaElement 原型方法，精準捕獲未掛載至 DOM 的背景離線媒體（如 Spotify Web 播放器）
     try {
       const origPlay = HTMLMediaElement.prototype.play;
       HTMLMediaElement.prototype.play = function (this: HTMLMediaElement) {
         if (!detachedMediaElements.has(this)) {
           detachedMediaElements.add(this);
-          if (!activeMedia || activeMedia.paused) {
+          if (shouldSwitchMedia(this)) {
             attachToMedia(this);
           } else {
             broadcastStatus();
@@ -69,6 +87,19 @@ export default defineContentScript({
           results.push(detached);
         }
       }
+
+      // 檢查主世界橋接容器內的媒體
+      try {
+        const bridge = document.getElementById("__equalizer_media_bridge__");
+        if (bridge) {
+          const bridgeMedia = bridge.querySelectorAll<HTMLMediaElement>("video, audio");
+          bridgeMedia.forEach(m => {
+            if (!results.includes(m)) {
+              results.push(m);
+            }
+          });
+        }
+      } catch (_) {}
 
       return results;
     }
@@ -477,13 +508,16 @@ export default defineContentScript({
       });
 
       // 2. 全域捕獲階段監聽媒體播放生命週期事件
-      const mediaLifecycleEvents = ["play", "pause", "volumechange", "loadedmetadata", "loadstart", "ended"];
+      const mediaLifecycleEvents = ["play", "playing", "pause", "volumechange", "loadedmetadata", "loadstart", "ended"];
       mediaLifecycleEvents.forEach(evt => {
         document.addEventListener(
           evt,
           event => {
             if (event.target instanceof HTMLMediaElement) {
-              if (evt === "play" && (!activeMedia || activeMedia.paused)) {
+              if (
+                (evt === "play" || evt === "playing" || evt === "volumechange") &&
+                shouldSwitchMedia(event.target)
+              ) {
                 attachToMedia(event.target);
               } else {
                 broadcastStatus();
@@ -499,13 +533,13 @@ export default defineContentScript({
         for (const mutation of mutations) {
           for (const node of mutation.addedNodes) {
             if (node instanceof HTMLMediaElement) {
-              if (!activeMedia || activeMedia.paused) {
+              if (shouldSwitchMedia(node)) {
                 attachToMedia(node);
               }
             } else if (node instanceof Element) {
               const media = node.querySelector("video, audio");
               if (media instanceof HTMLMediaElement) {
-                if (!activeMedia || activeMedia.paused) {
+                if (shouldSwitchMedia(media)) {
                   attachToMedia(media);
                 }
               }
@@ -517,6 +551,19 @@ export default defineContentScript({
       observer.observe(document.documentElement, {
         childList: true,
         subtree: true,
+      });
+
+      // 4. 監聽主世界媒體橋接事件（專為 Spotify 等離線串流媒體即時反應）
+      document.addEventListener("__equalizer_media_bridge_attached__", () => {
+        const bridge = document.getElementById("__equalizer_media_bridge__");
+        if (bridge) {
+          const bridgeMedia = bridge.querySelectorAll<HTMLMediaElement>("video, audio");
+          bridgeMedia.forEach(m => {
+            if (shouldSwitchMedia(m)) {
+              attachToMedia(m);
+            }
+          });
+        }
       });
 
       // 4. 監聽來自 Popup 的指令

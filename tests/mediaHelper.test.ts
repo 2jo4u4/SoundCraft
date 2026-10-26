@@ -55,6 +55,35 @@ describe("MediaHelper - Scoring & Extraction", () => {
     expect(activeScore - inactiveScore).toBe(50);
   });
 
+  it("should score Spotify bridge audio higher than muted background Canvas video", () => {
+    // Spotify Canvas: muted video with videoWidth
+    const canvasVideo = {
+      tagName: "VIDEO",
+      paused: false,
+      muted: true,
+      volume: 1,
+      videoWidth: 1080,
+      duration: 7.8,
+      ended: false,
+    } as any;
+
+    // Spotify Audio: audible video mounted in bridge container
+    const bridgeAudio = {
+      tagName: "VIDEO",
+      paused: false,
+      muted: false,
+      volume: 0.8,
+      duration: 210,
+      ended: false,
+      parentElement: { id: "__equalizer_media_bridge__" },
+    } as any;
+
+    const canvasScore = scoreMedia(canvasVideo, true); // even if currently active
+    const audioScore = scoreMedia(bridgeAudio, false);
+
+    expect(audioScore).toBeGreaterThan(canvasScore);
+  });
+
   it("should extract YouTube video metadata correctly", () => {
     const fakeDoc = {
       location: { hostname: "www.youtube.com" },

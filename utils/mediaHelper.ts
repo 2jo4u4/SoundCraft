@@ -24,8 +24,8 @@ export function scoreMedia(media: HTMLMediaElement, isCurrentlyActive = false): 
     score += 500;
   }
 
-  // 3. 視訊有實際寬高像素 (+200)
-  if (isVideoElement(media) && (media.videoWidth > 0 || (media as any).width > 0)) {
+  // 3. 視訊有實際寬高像素且非靜音 (+200)
+  if (isVideoElement(media) && (media.videoWidth > 0 || (media as any).width > 0) && !media.muted) {
     score += 200;
   }
 
@@ -34,7 +34,18 @@ export function scoreMedia(media: HTMLMediaElement, isCurrentlyActive = false): 
     score += 100;
   }
 
-  // 5. 穩定性加分：若是當前正在連線的媒體，避免在多媒體間不斷震盪 (+50)
+  // 5. 橋接容器內的離線音訊載體（Spotify 等背景串流）特別加分 (+800)
+  try {
+    if (
+      media.parentElement?.id === "__equalizer_media_bridge__" ||
+      media.closest?.("#__equalizer_media_bridge__") ||
+      (media as any).__isBridgeMedia
+    ) {
+      score += 800;
+    }
+  } catch (_) {}
+
+  // 6. 穩定性加分：若是當前正在連線的媒體，避免在多媒體間不斷震盪 (+50)
   if (isCurrentlyActive) {
     score += 50;
   }
