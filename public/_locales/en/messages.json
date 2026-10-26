@@ -194,5 +194,49 @@
   "heightReduce": {
     "message": "Treble Cut (System)",
     "description": "Backward compat"
+  },
+  "pickFromPage": {
+    "message": "Pick from Web Page",
+    "description": "Manually pick media element from page"
+  },
+  "autoSelectBest": {
+    "message": "Auto Select Best",
+    "description": "Auto-select best audio stream"
+  },
+  "discoveredMediaTitle": {
+    "message": "Discovered Media Sources",
+    "description": "Title for discovered media sources"
+  },
+  "pickerOverlayHint": {
+    "message": "Click element to equalize (Press ESC to cancel)",
+    "description": "Hint for element picker overlay"
+  },
+  "pickerSuccessToast": {
+    "message": "Equalizer connected successfully!",
+    "description": "Toast notification when media is selected"
+  },
+  "floatingSpotifyHint": {
+    "message": "🎵 Background audio detected (Click to select)",
+    "description": "Floating chip hint for background audio like Spotify"
+  },
+  "mediaAudible": {
+    "message": "Audible",
+    "description": "Media state: audible"
+  },
+  "mediaPlaying": {
+    "message": "Playing",
+    "description": "Media state: playing"
+  },
+  "mediaPaused": {
+    "message": "Paused",
+    "description": "Media state: paused"
+  },
+  "mediaMuted": {
+    "message": "Muted",
+    "description": "Media state: muted"
+  },
+  "mediaRecommended": {
+    "message": "Recommended",
+    "description": "Recommended media badge"
   }
 }

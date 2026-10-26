@@ -27,6 +27,7 @@ import type {
   Filters,
   PresetMap,
   AudioConnectionStatus,
+  DiscoveredMediaItem,
   SendMsg,
   MsgToFormat,
 } from "../../utils";
@@ -52,6 +53,7 @@ export function App({ storeData }: { storeData: Required<StoreDataType> }) {
   const [mediaIndex, setMediaIndex] = React.useState(0);
   const [mediaTotal, setMediaTotal] = React.useState(0);
   const [isBypassed, setIsBypassed] = React.useState(false);
+  const [mediaList, setMediaList] = React.useState<DiscoveredMediaItem[]>([]);
 
   const [saveDialogOpen, setSaveDialogOpen] = React.useState(false);
   const [alertNotice, setAlertNotice] = React.useState<{
@@ -89,6 +91,7 @@ export function App({ storeData }: { storeData: Required<StoreDataType> }) {
           if (data.mediaIndex !== undefined) setMediaIndex(data.mediaIndex);
           if (data.mediaTotal !== undefined) setMediaTotal(data.mediaTotal);
           if (data.bypass !== undefined) setIsBypassed(data.bypass);
+          if (data.mediaList) setMediaList(data.mediaList);
           break;
         }
         case "statusUpdate": {
@@ -97,6 +100,7 @@ export function App({ storeData }: { storeData: Required<StoreDataType> }) {
           if (data.mediaIndex !== undefined) setMediaIndex(data.mediaIndex);
           if (data.mediaTotal !== undefined) setMediaTotal(data.mediaTotal);
           if (data.bypass !== undefined) setIsBypassed(data.bypass);
+          if (data.mediaList) setMediaList(data.mediaList);
           break;
         }
       }
@@ -126,6 +130,19 @@ export function App({ storeData }: { storeData: Required<StoreDataType> }) {
 
   const handleRescan = async () => {
     await sendMessageToCurrentTabs("connect", { cycle: true });
+  };
+
+  const handleSelectMedia = async (index: number) => {
+    await sendMessageToCurrentTabs("selectMedia", { index });
+  };
+
+  const handleAutoSelectBest = async () => {
+    await sendMessageToCurrentTabs("autoSelectBest", null);
+  };
+
+  const handleStartPicker = async () => {
+    await sendMessageToCurrentTabs("startElementPicker", null);
+    window.close();
   };
 
   const handleSetFilter = (key: string, updatedPresets: PresetMap = presets) => {
@@ -277,7 +294,11 @@ export function App({ storeData }: { storeData: Required<StoreDataType> }) {
               status={audioStatus}
               mediaIndex={mediaIndex}
               mediaTotal={mediaTotal}
+              mediaList={mediaList}
               onRescan={handleRescan}
+              onSelectMedia={handleSelectMedia}
+              onStartPicker={handleStartPicker}
+              onAutoSelectBest={handleAutoSelectBest}
             />
 
             {/* ② 預設集下拉選單 (獨立一整列全寬) */}

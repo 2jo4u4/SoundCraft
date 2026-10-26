@@ -14,6 +14,11 @@ import {
   Box,
   Switch,
   FormControlLabel,
+  Menu,
+  Divider,
+  ListItemIcon,
+  ListItemText,
+  ListSubheader,
 } from "@mui/material";
 import ExpandLessIcon from "@mui/icons-material/esm/ExpandLess.js";
 import ExpandMoreIcon from "@mui/icons-material/esm/ExpandMore.js";
@@ -27,10 +32,16 @@ import SyncIcon from "@mui/icons-material/esm/Sync.js";
 import CheckCircleOutlineIcon from "@mui/icons-material/esm/CheckCircleOutline.js";
 import HighlightOffIcon from "@mui/icons-material/esm/HighlightOff.js";
 import WarningAmberIcon from "@mui/icons-material/esm/WarningAmber.js";
+import AdsClickIcon from "@mui/icons-material/esm/AdsClick.js";
+import AutoAwesomeIcon from "@mui/icons-material/esm/AutoAwesome.js";
+import VideocamIcon from "@mui/icons-material/esm/Videocam.js";
+import AudiotrackIcon from "@mui/icons-material/esm/Audiotrack.js";
+import CheckIcon from "@mui/icons-material/esm/Check.js";
+import ArrowDropDownIcon from "@mui/icons-material/esm/ArrowDropDown.js";
 import { browser } from "wxt/browser";
 
 import { hzToTitle } from "../../utils";
-import type { Filters, PresetMap, AudioConnectionStatus } from "../../utils";
+import type { Filters, PresetMap, AudioConnectionStatus, DiscoveredMediaItem } from "../../utils";
 
 export interface AudioStatusBarProps {
   isBypassed: boolean;
@@ -38,7 +49,11 @@ export interface AudioStatusBarProps {
   status: AudioConnectionStatus;
   mediaIndex: number;
   mediaTotal: number;
+  mediaList?: DiscoveredMediaItem[];
   onRescan: () => void;
+  onSelectMedia: (index: number) => void;
+  onStartPicker: () => void;
+  onAutoSelectBest: () => void;
 }
 
 export function AudioStatusBar({
@@ -47,9 +62,23 @@ export function AudioStatusBar({
   status,
   mediaIndex,
   mediaTotal,
+  mediaList = [],
   onRescan,
+  onSelectMedia,
+  onStartPicker,
+  onAutoSelectBest,
 }: AudioStatusBarProps) {
   const [spinning, setSpinning] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const isMenuOpen = Boolean(anchorEl);
+
+  const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
 
   const handleSyncClick = () => {
     setSpinning(true);
@@ -113,7 +142,19 @@ export function AudioStatusBar({
           size="small"
           color={statusColor}
           variant="outlined"
-          sx={{ fontWeight: "medium", fontSize: "0.72rem", height: 26 }}
+          deleteIcon={<ArrowDropDownIcon />}
+          onDelete={handleOpenMenu}
+          onClick={handleOpenMenu}
+          sx={{
+            fontWeight: "medium",
+            fontSize: "0.72rem",
+            height: 26,
+            cursor: "pointer",
+            "& .MuiChip-deleteIcon": {
+              color: "inherit",
+              marginRight: "2px",
+            },
+          }}
         />
         <Tooltip title={browser.i18n.getMessage("rescanMedia" as any)}>
           <IconButton
@@ -128,6 +169,158 @@ export function AudioStatusBar({
             <SyncIcon fontSize="small" />
           </IconButton>
         </Tooltip>
+
+        <Menu
+          anchorEl={anchorEl}
+          open={isMenuOpen}
+          onClose={handleCloseMenu}
+          PaperProps={{
+            sx: {
+              width: 290,
+              maxHeight: 380,
+              boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
+              borderRadius: 2,
+            },
+          }}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "right",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+        >
+          <MenuItem
+            onClick={() => {
+              handleCloseMenu();
+              onStartPicker();
+            }}
+            sx={{ py: 0.8, fontSize: "0.85rem" }}
+          >
+            <ListItemIcon sx={{ minWidth: 32 }}>
+              <AdsClickIcon fontSize="small" color="primary" />
+            </ListItemIcon>
+            <ListItemText
+              primary={browser.i18n.getMessage("pickFromPage" as any) || "點擊畫面選取目標"}
+              primaryTypographyProps={{ fontSize: "0.83rem", fontWeight: "medium" }}
+            />
+          </MenuItem>
+
+          <MenuItem
+            onClick={() => {
+              handleCloseMenu();
+              onAutoSelectBest();
+            }}
+            sx={{ py: 0.8, fontSize: "0.85rem" }}
+          >
+            <ListItemIcon sx={{ minWidth: 32 }}>
+              <AutoAwesomeIcon fontSize="small" color="primary" />
+            </ListItemIcon>
+            <ListItemText
+              primary={browser.i18n.getMessage("autoSelectBest" as any) || "自動最佳推薦"}
+              primaryTypographyProps={{ fontSize: "0.83rem", fontWeight: "medium" }}
+            />
+          </MenuItem>
+
+          <Divider sx={{ my: 0.5 }} />
+
+          <ListSubheader
+            sx={{
+              lineHeight: "26px",
+              fontSize: "0.72rem",
+              bgcolor: "transparent",
+              color: "text.secondary",
+            }}
+          >
+            {browser.i18n.getMessage("discoveredMediaTitle" as any) || "已偵測的音視訊清單"} ({mediaList.length})
+          </ListSubheader>
+
+          {mediaList.length === 0 ? (
+            <MenuItem disabled sx={{ fontSize: "0.8rem", py: 1 }}>
+              <ListItemText
+                primary={browser.i18n.getMessage("statusNoMedia" as any) || "未偵測到任何播放中的媒體"}
+                primaryTypographyProps={{ fontSize: "0.8rem", color: "text.secondary" }}
+              />
+            </MenuItem>
+          ) : (
+            mediaList.map((item, idx) => {
+              let stateText = item.isAudible
+                ? (browser.i18n.getMessage("mediaAudible" as any) || "發聲中")
+                : item.isPlaying
+                ? (browser.i18n.getMessage("mediaPlaying" as any) || "播放中")
+                : (browser.i18n.getMessage("mediaPaused" as any) || "已暫停");
+
+              if (item.isMuted) {
+                stateText += ` • ${browser.i18n.getMessage("mediaMuted" as any) || "靜音"}`;
+              }
+
+              const secondaryParts: string[] = [];
+              if (item.subtitle) secondaryParts.push(item.subtitle);
+              if (item.width > 0 && item.height > 0) secondaryParts.push(`${item.width}x${item.height}`);
+              secondaryParts.push(stateText);
+
+              return (
+                <MenuItem
+                  key={item.id || idx}
+                  selected={item.isActive}
+                  onClick={() => {
+                    handleCloseMenu();
+                    onSelectMedia(item.index);
+                  }}
+                  sx={{
+                    py: 0.8,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Box sx={{ display: "flex", alignItems: "center", overflow: "hidden", mr: 1 }}>
+                    <ListItemIcon sx={{ minWidth: 30 }}>
+                      {item.type === "video" ? (
+                        <VideocamIcon fontSize="small" color={item.isPlaying ? "primary" : "action"} />
+                      ) : (
+                        <AudiotrackIcon fontSize="small" color={item.isPlaying ? "primary" : "action"} />
+                      )}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+                          <Typography
+                            variant="body2"
+                            noWrap
+                            sx={{
+                              maxWidth: 165,
+                              fontSize: "0.82rem",
+                              fontWeight: item.isActive ? "bold" : "normal",
+                            }}
+                          >
+                            {item.title}
+                          </Typography>
+                          {item.isRecommended && (
+                            <Chip
+                              label={browser.i18n.getMessage("mediaRecommended" as any) || "推薦"}
+                              size="small"
+                              color="secondary"
+                              sx={{ height: 16, fontSize: "0.62rem", px: 0.2 }}
+                            />
+                          )}
+                        </Box>
+                      }
+                      secondary={secondaryParts.join(" • ")}
+                      secondaryTypographyProps={{
+                        fontSize: "0.68rem",
+                        noWrap: true,
+                        maxWidth: 195,
+                      }}
+                    />
+                  </Box>
+                  {item.isActive && <CheckIcon fontSize="small" color="primary" />}
+                </MenuItem>
+              );
+            })
+          )}
+        </Menu>
       </Box>
     </Box>
   );

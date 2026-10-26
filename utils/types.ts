@@ -19,6 +19,22 @@ export type PresetMap = Record<string, FilterPreset>;
 
 export type AudioConnectionStatus = "connected" | "no_media" | "cors_restricted";
 
+export interface DiscoveredMediaItem {
+  id: string;
+  index: number;
+  type: "video" | "audio";
+  title: string;
+  subtitle?: string;
+  width: number;
+  height: number;
+  isPlaying: boolean;
+  isAudible: boolean;
+  isMuted: boolean;
+  isCorsRestricted: boolean;
+  isRecommended: boolean;
+  isActive: boolean;
+}
+
 export interface MediaPlaybackInfo {
   status: AudioConnectionStatus;
   mediaIndex: number;
@@ -34,6 +50,7 @@ export interface MsgToFormat {
     mediaIndex: number;
     mediaTotal: number;
     bypass: boolean;
+    mediaList?: DiscoveredMediaItem[];
   };
   connect: { cycle?: boolean } | null;
   ctrl: { index: number; val: number }[];
@@ -42,10 +59,17 @@ export interface MsgToFormat {
     mediaIndex: number;
     mediaTotal: number;
     bypass?: boolean;
+    mediaList?: DiscoveredMediaItem[];
   };
   toggleBypass: {
     enabled: boolean;
   };
+  selectMedia: {
+    id?: string;
+    index?: number;
+  };
+  startElementPicker: null;
+  autoSelectBest: null;
 }
 
 export type NotifyType = keyof MsgToFormat;

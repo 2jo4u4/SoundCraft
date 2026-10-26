@@ -194,5 +194,49 @@
   "heightReduce": {
     "message": "高頻衰減 (系統)",
     "description": "舊版相容 key"
+  },
+  "pickFromPage": {
+    "message": "點擊畫面選取目標",
+    "description": "手動點擊網頁元素選取目標"
+  },
+  "autoSelectBest": {
+    "message": "自動最佳推薦",
+    "description": "自動選取最佳音訊"
+  },
+  "discoveredMediaTitle": {
+    "message": "已偵測的音視訊清單",
+    "description": "偵測到的媒體列表標題"
+  },
+  "pickerOverlayHint": {
+    "message": "點擊畫面以繫結等化器 (按 ESC 取消)",
+    "description": "畫面選取覆蓋層提示"
+  },
+  "pickerSuccessToast": {
+    "message": "已成功繫結音訊目標！",
+    "description": "畫面選取成功通知"
+  },
+  "floatingSpotifyHint": {
+    "message": "🎵 偵測到背景播放音訊 (點此快速繫結)",
+    "description": "懸浮背景音樂提示"
+  },
+  "mediaAudible": {
+    "message": "發聲中",
+    "description": "媒體狀態：發聲中"
+  },
+  "mediaPlaying": {
+    "message": "播放中",
+    "description": "媒體狀態：播放中"
+  },
+  "mediaPaused": {
+    "message": "已暫停",
+    "description": "媒體狀態：已暫停"
+  },
+  "mediaMuted": {
+    "message": "靜音",
+    "description": "媒體狀態：靜音"
+  },
+  "mediaRecommended": {
+    "message": "最佳推薦",
+    "description": "最佳推薦標記"
   }
 }
