@@ -34,7 +34,13 @@ import type {
 import { Help } from "./Help";
 import { AudioStatusBar, PresetSelector, PresetActionButtons, EqualizerSlider } from "./Equalizer";
 
-const tabSize = { height: 36, minHeight: 36 };
+const tabSize = {
+  height: 38,
+  minHeight: 38,
+  fontSize: "0.82rem",
+  textTransform: "none",
+  fontWeight: "medium",
+};
 
 export function App({ storeData }: { storeData: Required<StoreDataType> }) {
   const [tabIndex, setTabIndex] = React.useState(0);
@@ -253,7 +259,7 @@ export function App({ storeData }: { storeData: Required<StoreDataType> }) {
   };
 
   return (
-    <Box width={380} sx={{ p: 1.5, boxSizing: "border-box" }}>
+    <Box width={400} sx={{ p: 1.5, boxSizing: "border-box" }}>
       {/* 頁籤分頁（最頂部） */}
       <Tabs
         value={tabIndex}

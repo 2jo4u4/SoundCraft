@@ -126,7 +126,14 @@ export function AudioStatusBar({
           />
         }
         label={
-          <Typography variant="body2" sx={{ fontWeight: "medium", fontSize: "0.82rem" }}>
+          <Typography
+            variant="body2"
+            sx={{
+              fontWeight: 500,
+              fontSize: "0.78rem",
+              whiteSpace: "nowrap",
+            }}
+          >
             {!isBypassed
               ? browser.i18n.getMessage("eqEnabled" as any)
               : browser.i18n.getMessage("eqBypassed" as any)}
@@ -391,7 +398,7 @@ export function PresetActionButtons({
             startIcon={isFavorite ? <StarIcon /> : <StarBorderIcon />}
             color={isFavorite ? "warning" : "inherit"}
             onClick={onFavorite}
-            sx={{ flex: 1, py: 0.4, fontSize: "0.8rem", textTransform: "none" }}
+            sx={{ flex: 1, py: 0.3, px: 0.5, fontSize: "0.75rem", textTransform: "none", whiteSpace: "nowrap" }}
           >
             {browser.i18n.getMessage("favoriteBtn" as any)}
           </Button>
@@ -406,7 +413,7 @@ export function PresetActionButtons({
               disabled={!isCustom || !isDirty}
               color={isDirty ? "primary" : "inherit"}
               onClick={onUpdate}
-              sx={{ flex: 1, py: 0.4, fontSize: "0.8rem", textTransform: "none" }}
+              sx={{ flex: 1, py: 0.3, px: 0.5, fontSize: "0.75rem", textTransform: "none", whiteSpace: "nowrap" }}
             >
               {browser.i18n.getMessage("updateBtn" as any)}
             </Button>
@@ -420,7 +427,7 @@ export function PresetActionButtons({
             startIcon={<AddIcon />}
             color="inherit"
             onClick={onSaveAs}
-            sx={{ flex: 1, py: 0.4, fontSize: "0.8rem", textTransform: "none" }}
+            sx={{ flex: 1, py: 0.3, px: 0.5, fontSize: "0.75rem", textTransform: "none", whiteSpace: "nowrap" }}
           >
             {browser.i18n.getMessage("saveAsBtn" as any)}
           </Button>
@@ -438,7 +445,7 @@ export function PresetActionButtons({
               disabled={!isDirty}
               color="inherit"
               onClick={onRevert}
-              sx={{ flex: 1, py: 0.4, fontSize: "0.8rem", textTransform: "none" }}
+              sx={{ flex: 1, py: 0.3, px: 0.5, fontSize: "0.75rem", textTransform: "none", whiteSpace: "nowrap" }}
             >
               {browser.i18n.getMessage("revertBtn" as any)}
             </Button>
@@ -454,7 +461,7 @@ export function PresetActionButtons({
               disabled={!isCustom}
               color="error"
               onClick={onDelete}
-              sx={{ flex: 1, py: 0.4, fontSize: "0.8rem", textTransform: "none" }}
+              sx={{ flex: 1, py: 0.3, px: 0.5, fontSize: "0.75rem", textTransform: "none", whiteSpace: "nowrap" }}
             >
               {browser.i18n.getMessage("deleteBtn" as any)}
             </Button>

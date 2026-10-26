@@ -72,7 +72,7 @@
     "description": "Backward compatibility"
   },
   "help": {
-    "message": "Frequency Guide",
+    "message": "Band Guide",
     "description": "Help tab title"
   },
   "aboutEqualizer": {
@@ -116,11 +116,11 @@
     "description": "EQ power toggle"
   },
   "eqEnabled": {
-    "message": "Equalizer Enabled",
+    "message": "Enabled",
     "description": "Power on"
   },
   "eqBypassed": {
-    "message": "Equalizer Disabled",
+    "message": "Bypassed",
     "description": "Power off"
   },
   "favoriteBtn": {
