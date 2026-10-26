@@ -116,12 +116,32 @@
     "description": "等化器總開關"
   },
   "eqEnabled": {
-    "message": "開啟",
+    "message": "啟動等化器",
     "description": "開關開啟"
   },
   "eqBypassed": {
-    "message": "旁路 (關閉)",
+    "message": "關閉等化器",
     "description": "開關關閉"
+  },
+  "favoriteBtn": {
+    "message": "首選",
+    "description": "首選按鈕文字"
+  },
+  "updateBtn": {
+    "message": "儲存",
+    "description": "覆蓋儲存按鈕文字"
+  },
+  "saveAsBtn": {
+    "message": "另存",
+    "description": "另存按鈕文字"
+  },
+  "revertBtn": {
+    "message": "還原",
+    "description": "還原按鈕文字"
+  },
+  "deleteBtn": {
+    "message": "刪除",
+    "description": "刪除按鈕文字"
   },
   "updatePreset": {
     "message": "儲存變更 (覆蓋)",

@@ -31,7 +31,7 @@ import type {
   MsgToFormat,
 } from "../../utils";
 import { Help } from "./Help";
-import { TopControlBar, InlinePresetBar, EqualizerSlider } from "./Equalizer";
+import { AudioStatusBar, PresetSelector, PresetActionButtons, EqualizerSlider } from "./Equalizer";
 
 const tabSize = { height: 36, minHeight: 36 };
 
@@ -237,17 +237,7 @@ export function App({ storeData }: { storeData: Required<StoreDataType> }) {
 
   return (
     <Box width={380} sx={{ p: 1.5, boxSizing: "border-box" }}>
-      {/* 頂部主控與狀態列 */}
-      <TopControlBar
-        isBypassed={isBypassed}
-        onTogglePower={handleTogglePower}
-        status={audioStatus}
-        mediaIndex={mediaIndex}
-        mediaTotal={mediaTotal}
-        onRescan={handleRescan}
-      />
-
-      {/* 頁籤分頁 */}
+      {/* 頁籤分頁（最頂部） */}
       <Tabs
         value={tabIndex}
         onChange={(_, newVal) => setTabIndex(newVal)}
@@ -268,7 +258,7 @@ export function App({ storeData }: { storeData: Required<StoreDataType> }) {
         />
       </Tabs>
 
-      {/* 主面板 (免滾動捲軸 Cockpit) */}
+      {/* 主面板 */}
       <Paper
         elevation={2}
         sx={{
@@ -280,11 +270,25 @@ export function App({ storeData }: { storeData: Required<StoreDataType> }) {
       >
         {tabIndex === 0 && (
           <React.Fragment>
-            {/* 單行整合預設工具列 */}
-            <InlinePresetBar
+            {/* ① 音訊狀態列：開關 (啟動等化器/關閉等化器) + 狀態Badge + 🔄 */}
+            <AudioStatusBar
+              isBypassed={isBypassed}
+              onTogglePower={handleTogglePower}
+              status={audioStatus}
+              mediaIndex={mediaIndex}
+              mediaTotal={mediaTotal}
+              onRescan={handleRescan}
+            />
+
+            {/* ② 預設集下拉選單 (獨立一整列全寬) */}
+            <PresetSelector
               presets={presets}
               value={activePresetKey}
               onSelect={handleSetFilter}
+            />
+
+            {/* ③ 兩列控制按鈕 (輕量純文字 Text Button 風格) */}
+            <PresetActionButtons
               isFavorite={isFavorite}
               isCustom={isCustom}
               isDirty={isDirty}
@@ -295,7 +299,7 @@ export function App({ storeData }: { storeData: Required<StoreDataType> }) {
               onDelete={handleDelete}
             />
 
-            {/* 5 頻段垂直滑桿 */}
+            {/* ④ 5 頻段垂直滑桿 */}
             <EqualizerSlider filters={mainFilter} onChange={handleMainFilterChange} />
           </React.Fragment>
         )}

@@ -116,12 +116,32 @@
     "description": "EQ power toggle"
   },
   "eqEnabled": {
-    "message": "ON",
+    "message": "Equalizer Enabled",
     "description": "Power on"
   },
   "eqBypassed": {
-    "message": "Bypass (OFF)",
+    "message": "Equalizer Disabled",
     "description": "Power off"
+  },
+  "favoriteBtn": {
+    "message": "Favorite",
+    "description": "Favorite button label"
+  },
+  "updateBtn": {
+    "message": "Save",
+    "description": "Update button label"
+  },
+  "saveAsBtn": {
+    "message": "Save As",
+    "description": "Save As button label"
+  },
+  "revertBtn": {
+    "message": "Revert",
+    "description": "Revert button label"
+  },
+  "deleteBtn": {
+    "message": "Delete",
+    "description": "Delete button label"
   },
   "updatePreset": {
     "message": "Update Preset (Overwrite)",

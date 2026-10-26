@@ -3,7 +3,7 @@ import {
   Slider,
   Grid,
   Typography,
-  ButtonGroup,
+  Button,
   IconButton,
   InputLabel,
   MenuItem,
@@ -32,7 +32,7 @@ import { browser } from "wxt/browser";
 import { hzToTitle } from "../../utils";
 import type { Filters, PresetMap, AudioConnectionStatus } from "../../utils";
 
-export interface TopControlBarProps {
+export interface AudioStatusBarProps {
   isBypassed: boolean;
   onTogglePower: (enabled: boolean) => void;
   status: AudioConnectionStatus;
@@ -41,14 +41,14 @@ export interface TopControlBarProps {
   onRescan: () => void;
 }
 
-export function TopControlBar({
+export function AudioStatusBar({
   isBypassed,
   onTogglePower,
   status,
   mediaIndex,
   mediaTotal,
   onRescan,
-}: TopControlBarProps) {
+}: AudioStatusBarProps) {
   const [spinning, setSpinning] = React.useState(false);
 
   const handleSyncClick = () => {
@@ -79,11 +79,12 @@ export function TopControlBar({
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        px: 0.5,
-        py: 0.5,
-        mb: 1,
+        px: 1,
+        py: 0.6,
+        mb: 1.5,
         borderRadius: 1,
         bgcolor: "rgba(0, 0, 0, 0.03)",
+        border: "1px solid rgba(0, 0, 0, 0.06)",
       }}
     >
       <FormControlLabel
@@ -96,7 +97,7 @@ export function TopControlBar({
           />
         }
         label={
-          <Typography variant="body2" sx={{ fontWeight: "medium", fontSize: "0.8rem" }}>
+          <Typography variant="body2" sx={{ fontWeight: "medium", fontSize: "0.82rem" }}>
             {!isBypassed
               ? browser.i18n.getMessage("eqEnabled" as any)
               : browser.i18n.getMessage("eqBypassed" as any)}
@@ -132,10 +133,40 @@ export function TopControlBar({
   );
 }
 
-export interface InlinePresetBarProps {
+export interface PresetSelectorProps {
   presets: PresetMap;
   value: string;
   onSelect: (key: string) => void;
+}
+
+export function PresetSelector({ presets, value, onSelect }: PresetSelectorProps) {
+  return (
+    <FormControl fullWidth size="small" sx={{ mb: 1.2 }}>
+      <InputLabel id="equalizer-select-label">{browser.i18n.getMessage("equalizer")}</InputLabel>
+      <Select
+        labelId="equalizer-select-label"
+        value={value}
+        label={browser.i18n.getMessage("equalizer")}
+        onChange={event => onSelect(event.target.value)}
+        sx={{ height: 38, fontSize: "0.85rem" }}
+      >
+        {Object.entries(presets).map(([key, preset]) => {
+          const displayText = preset.i18nKey
+            ? browser.i18n.getMessage(preset.i18nKey as any) || key
+            : preset.name || key;
+
+          return (
+            <MenuItem key={key} value={key} sx={{ fontSize: "0.85rem" }}>
+              {displayText}
+            </MenuItem>
+          );
+        })}
+      </Select>
+    </FormControl>
+  );
+}
+
+export interface PresetActionButtonsProps {
   isFavorite: boolean;
   isCustom: boolean;
   isDirty: boolean;
@@ -146,10 +177,7 @@ export interface InlinePresetBarProps {
   onDelete: () => void;
 }
 
-export function InlinePresetBar({
-  presets,
-  value,
-  onSelect,
+export function PresetActionButtons({
   isFavorite,
   isCustom,
   isDirty,
@@ -158,78 +186,88 @@ export function InlinePresetBar({
   onSaveAs,
   onRevert,
   onDelete,
-}: InlinePresetBarProps) {
+}: PresetActionButtonsProps) {
   return (
-    <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1.5 }}>
-      <FormControl size="small" sx={{ flex: 1, minWidth: 150 }}>
-        <InputLabel id="equalizer-select-label">{browser.i18n.getMessage("equalizer")}</InputLabel>
-        <Select
-          labelId="equalizer-select-label"
-          value={value}
-          label={browser.i18n.getMessage("equalizer")}
-          onChange={event => onSelect(event.target.value)}
-          sx={{ height: 36, fontSize: "0.85rem" }}
-        >
-          {Object.entries(presets).map(([key, preset]) => {
-            const displayText = preset.i18nKey
-              ? browser.i18n.getMessage(preset.i18nKey as any) || key
-              : preset.name || key;
-
-            return (
-              <MenuItem key={key} value={key} sx={{ fontSize: "0.85rem" }}>
-                {displayText}
-              </MenuItem>
-            );
-          })}
-        </Select>
-      </FormControl>
-
-      <ButtonGroup variant="outlined" size="small" sx={{ height: 36 }}>
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 0.8, mb: 1.5 }}>
+      {/* 第一列：★ 首選 / 💾 儲存 / ➕ 另存 */}
+      <Box sx={{ display: "flex", gap: 1 }}>
         <Tooltip title={browser.i18n.getMessage("favorite")}>
-          <IconButton
-            onClick={onFavorite}
+          <Button
             size="small"
-            color={isFavorite ? "warning" : "default"}
+            variant="text"
+            startIcon={isFavorite ? <StarIcon /> : <StarBorderIcon />}
+            color={isFavorite ? "warning" : "inherit"}
+            onClick={onFavorite}
+            sx={{ flex: 1, py: 0.4, fontSize: "0.8rem", textTransform: "none" }}
           >
-            {isFavorite ? <StarIcon fontSize="small" /> : <StarBorderIcon fontSize="small" />}
-          </IconButton>
+            {browser.i18n.getMessage("favoriteBtn" as any)}
+          </Button>
         </Tooltip>
 
         <Tooltip title={browser.i18n.getMessage("updatePreset" as any)}>
           <span>
-            <IconButton
-              onClick={onUpdate}
-              disabled={!isCustom || !isDirty}
+            <Button
               size="small"
-              color={isDirty ? "primary" : "default"}
+              variant="text"
+              startIcon={<SaveIcon />}
+              disabled={!isCustom || !isDirty}
+              color={isDirty ? "primary" : "inherit"}
+              onClick={onUpdate}
+              sx={{ flex: 1, py: 0.4, fontSize: "0.8rem", textTransform: "none" }}
             >
-              <SaveIcon fontSize="small" />
-            </IconButton>
+              {browser.i18n.getMessage("updateBtn" as any)}
+            </Button>
           </span>
         </Tooltip>
 
         <Tooltip title={browser.i18n.getMessage("saveAsNew" as any)}>
-          <IconButton onClick={onSaveAs} size="small">
-            <AddIcon fontSize="small" />
-          </IconButton>
+          <Button
+            size="small"
+            variant="text"
+            startIcon={<AddIcon />}
+            color="inherit"
+            onClick={onSaveAs}
+            sx={{ flex: 1, py: 0.4, fontSize: "0.8rem", textTransform: "none" }}
+          >
+            {browser.i18n.getMessage("saveAsBtn" as any)}
+          </Button>
         </Tooltip>
+      </Box>
 
+      {/* 第二列：⟲ 還原 / 🗑 刪除 */}
+      <Box sx={{ display: "flex", gap: 1 }}>
         <Tooltip title={browser.i18n.getMessage("revertChanges" as any)}>
           <span>
-            <IconButton onClick={onRevert} disabled={!isDirty} size="small">
-              <RestoreIcon fontSize="small" />
-            </IconButton>
+            <Button
+              size="small"
+              variant="text"
+              startIcon={<RestoreIcon />}
+              disabled={!isDirty}
+              color="inherit"
+              onClick={onRevert}
+              sx={{ flex: 1, py: 0.4, fontSize: "0.8rem", textTransform: "none" }}
+            >
+              {browser.i18n.getMessage("revertBtn" as any)}
+            </Button>
           </span>
         </Tooltip>
 
         <Tooltip title={browser.i18n.getMessage("delete")}>
           <span>
-            <IconButton onClick={onDelete} disabled={!isCustom} size="small" color="error">
-              <DeleteForeverIcon fontSize="small" />
-            </IconButton>
+            <Button
+              size="small"
+              variant="text"
+              startIcon={<DeleteForeverIcon />}
+              disabled={!isCustom}
+              color="error"
+              onClick={onDelete}
+              sx={{ flex: 1, py: 0.4, fontSize: "0.8rem", textTransform: "none" }}
+            >
+              {browser.i18n.getMessage("deleteBtn" as any)}
+            </Button>
           </span>
         </Tooltip>
-      </ButtonGroup>
+      </Box>
     </Box>
   );
 }
