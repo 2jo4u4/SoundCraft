@@ -97,19 +97,28 @@ export class Equalizer {
     this.isBypassed = bypassed;
 
     if (this.currentSource) {
-      try {
-        this.currentSource.disconnect();
-      } catch (_) {}
+      this.routeSourceToOutput(this.currentSource);
+    }
+  }
 
-      if (this.isBypassed) {
-        // 直通壓縮器輸出
-        this.currentSource.connect(this.compressor);
-      } else if (this.filters.length > 0 && this.filters[0]) {
-        // 接回濾波器
-        this.currentSource.connect(this.filters[0]);
-      } else {
-        this.currentSource.connect(this.compressor);
+  /**
+   * 統一將音源節點導向輸出（依 Bypass 狀態分流，並確保先中斷舊連線）
+   */
+  private routeSourceToOutput(source: MediaElementAudioSourceNode) {
+    try {
+      source.disconnect();
+    } catch (_) {}
+
+    if (this.isBypassed) {
+      source.connect(this.compressor);
+    } else if (this.filters.length > 0 && this.filters[0]) {
+      try {
+        source.connect(this.filters[0]);
+      } catch (e) {
+        console.warn("[Equalizer] Failed to connect source to first filter:", e);
       }
+    } else {
+      source.connect(this.compressor);
     }
   }
 
@@ -134,17 +143,9 @@ export class Equalizer {
       lastFilter.connect(this.compressor);
     }
 
-    // 若當前已有 MediaSource，且未處於 Bypass，將其接入第一個 filter
+    // 若當前已有 MediaSource，導向輸出
     if (this.currentSource) {
-      if (this.isBypassed) {
-        this.currentSource.connect(this.compressor);
-      } else if (this.filters[0]) {
-        try {
-          this.currentSource.connect(this.filters[0]);
-        } catch (e) {
-          console.warn("[Equalizer] Source connect failed:", e);
-        }
-      }
+      this.routeSourceToOutput(this.currentSource);
     }
   }
 
@@ -197,19 +198,7 @@ export class Equalizer {
     }
 
     this.currentSource = source;
-
-    if (this.isBypassed) {
-      source.connect(this.compressor);
-    } else if (this.filters.length > 0 && this.filters[0]) {
-      try {
-        source.connect(this.filters[0]);
-      } catch (e) {
-        console.warn("[Equalizer] Failed to connect source to first filter:", e);
-      }
-    } else {
-      source.connect(this.compressor);
-    }
-
+    this.routeSourceToOutput(source);
     this.isStream = true;
   }
 }

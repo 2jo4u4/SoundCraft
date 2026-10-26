@@ -40,35 +40,14 @@ export default defineContentScript({
       return results;
     }
 
-    // 啟發式評分：選取最合適的目標媒體
-    function updateDiscoveredMedia(): HTMLMediaElement | null {
-      discoveredMedia = scanMediaElements();
-      if (discoveredMedia.length === 0) {
-        activeMediaIndex = 0;
-        return null;
-      }
-
-      // 1. 優先選取發聲播放中的媒體
-      const audibleIdx = discoveredMedia.findIndex(
-        el => !el.paused && !el.ended && !el.muted && el.volume > 0
-      );
-      if (audibleIdx !== -1) {
-        activeMediaIndex = audibleIdx;
-        return discoveredMedia[audibleIdx] ?? null;
-      }
-
-      // 2. 其次選取播放中的媒體
-      const playingIdx = discoveredMedia.findIndex(el => !el.paused && !el.ended);
-      if (playingIdx !== -1) {
-        activeMediaIndex = playingIdx;
-        return discoveredMedia[playingIdx] ?? null;
-      }
-
-      // 3. 備選：維持原索引或最後一個
-      if (activeMediaIndex >= discoveredMedia.length) {
-        activeMediaIndex = 0;
-      }
-      return discoveredMedia[activeMediaIndex] ?? null;
+    // 廣播當前狀態至 Popup
+    function broadcastStatus() {
+      sendMessageToRuntime("statusUpdate", {
+        status: currentStatus,
+        mediaIndex: discoveredMedia.length > 0 ? activeMediaIndex + 1 : 0,
+        mediaTotal: discoveredMedia.length,
+        bypass: equalizer ? equalizer.isBypassed : false,
+      });
     }
 
     // 將 Equalizer 繫結至指定媒體
@@ -89,42 +68,45 @@ export default defineContentScript({
       }
 
       await equalizer.stream(media);
-
-      // 通知 Popup 狀態更新
-      sendMessageToRuntime("statusUpdate", {
-        status: currentStatus,
-        mediaIndex: discoveredMedia.length > 0 ? activeMediaIndex + 1 : 0,
-        mediaTotal: discoveredMedia.length,
-        bypass: equalizer.isBypassed,
-      });
+      broadcastStatus();
     }
 
     // 嘗試自動發現並連接媒體
     async function tryConnect(cycle = false) {
-      const best = updateDiscoveredMedia();
-      if (!best) {
+      discoveredMedia = scanMediaElements();
+      if (discoveredMedia.length === 0) {
         currentStatus = "no_media";
         activeMedia = null;
-        sendMessageToRuntime("statusUpdate", {
-          status: currentStatus,
-          mediaIndex: 0,
-          mediaTotal: 0,
-          bypass: equalizer ? equalizer.isBypassed : false,
-        });
+        activeMediaIndex = 0;
+        broadcastStatus();
         return;
       }
 
       if (cycle && discoveredMedia.length > 1) {
-        // 循環切換到下一個媒體
+        // 循環切換到下一個媒體（避免被 audibleIdx 強制拉回）
         activeMediaIndex = (activeMediaIndex + 1) % discoveredMedia.length;
-        const target = discoveredMedia[activeMediaIndex];
-        if (target) {
-          await attachToMedia(target, activeMediaIndex);
-          return;
+      } else {
+        // 1. 優先選取發聲播放中的媒體
+        const audibleIdx = discoveredMedia.findIndex(
+          el => !el.paused && !el.ended && !el.muted && el.volume > 0
+        );
+        if (audibleIdx !== -1) {
+          activeMediaIndex = audibleIdx;
+        } else {
+          // 2. 其次選取播放中的媒體
+          const playingIdx = discoveredMedia.findIndex(el => !el.paused && !el.ended);
+          if (playingIdx !== -1) {
+            activeMediaIndex = playingIdx;
+          } else if (activeMediaIndex >= discoveredMedia.length) {
+            activeMediaIndex = 0;
+          }
         }
       }
 
-      await attachToMedia(best, activeMediaIndex);
+      const target = discoveredMedia[activeMediaIndex] ?? discoveredMedia[0];
+      if (target) {
+        await attachToMedia(target, activeMediaIndex);
+      }
     }
 
     // 初始化儲存與濾波器
@@ -182,46 +164,54 @@ export default defineContentScript({
 
       // 3. 監聽來自 Popup 的指令
       browser.runtime.onMessage.addListener((msg: SendMsg) => {
-        // 多 Frame 協調：只有目前擁有活躍媒體節點的 frame，或全頁唯一的頂層 frame 才響應
-        const isEligibleFrame = activeMedia !== null || window === window.top;
-
         switch (msg.type) {
           case "open": {
-            if (!isEligibleFrame) return;
-
-            // 回報當前濾波器與連線狀態給 Popup
-            sendMessageToRuntime("initUI", {
-              filters: equalizer ? equalizer.getCurrentFilters() : [],
-              status: currentStatus,
-              mediaIndex: discoveredMedia.length > 0 ? activeMediaIndex + 1 : 0,
-              mediaTotal: discoveredMedia.length,
-              bypass: equalizer ? equalizer.isBypassed : false,
-            });
+            if (activeMedia !== null) {
+              // 實際持有媒體的 Frame 立即響應（優先權最高）
+              sendMessageToRuntime("initUI", {
+                filters: equalizer ? equalizer.getCurrentFilters() : [],
+                status: currentStatus,
+                mediaIndex: discoveredMedia.length > 0 ? activeMediaIndex + 1 : 0,
+                mediaTotal: discoveredMedia.length,
+                bypass: equalizer ? equalizer.isBypassed : false,
+              });
+            } else if (window === window.top) {
+              // 若頂層 Frame 無媒體，延遲 150ms 響應，避免覆蓋子 iframe 已連線狀態
+              setTimeout(() => {
+                if (activeMedia === null) {
+                  sendMessageToRuntime("initUI", {
+                    filters: equalizer ? equalizer.getCurrentFilters() : [],
+                    status: "no_media",
+                    mediaIndex: 0,
+                    mediaTotal: 0,
+                    bypass: equalizer ? equalizer.isBypassed : false,
+                  });
+                }
+              }, 150);
+            }
             break;
           }
 
           case "connect": {
-            const data = msg.data as MsgToFormat["connect"];
-            tryConnect(Boolean(data?.cycle));
+            const mediaList = scanMediaElements();
+            if (mediaList.length > 0 || window === window.top) {
+              const data = msg.data as MsgToFormat["connect"];
+              tryConnect(Boolean(data?.cycle));
+            }
             break;
           }
 
           case "toggleBypass": {
-            if (equalizer) {
+            if (equalizer && (activeMedia !== null || window === window.top)) {
               const data = msg.data as MsgToFormat["toggleBypass"];
               equalizer.setBypass(!data.enabled);
-              sendMessageToRuntime("statusUpdate", {
-                status: currentStatus,
-                mediaIndex: discoveredMedia.length > 0 ? activeMediaIndex + 1 : 0,
-                mediaTotal: discoveredMedia.length,
-                bypass: equalizer.isBypassed,
-              });
+              broadcastStatus();
             }
             break;
           }
 
           case "ctrl": {
-            if (equalizer && activeMedia) {
+            if (equalizer && activeMedia !== null) {
               const gains = msg.data as MsgToFormat["ctrl"];
               equalizer.updateGains(gains);
             }

@@ -42,10 +42,6 @@ export function cloneFilters(filters: Filters): Filters {
   return filters.map(f => ({ ...f }));
 }
 
-export function cloneFilter(filter: Filter): Filter {
-  return { ...filter };
-}
-
 /**
  * 檢查媒體元素是否可能受跨域 (CORS) 限制
  */

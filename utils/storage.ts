@@ -60,6 +60,36 @@ export class Store {
     return Store.getAll();
   }
 
+  static async saveCustomPreset(name: string, preset: FilterPreset): Promise<PresetMap> {
+    const current = await Store.getAll();
+    const updatedCustom: PresetMap = {
+      ...current.customMap,
+      [name]: { ...preset, name },
+    };
+    await Store.set("customMap", updatedCustom);
+    return { ...current.alwaysExist, ...updatedCustom };
+  }
+
+  static async deleteCustomPreset(name: string): Promise<{ merged: PresetMap; newMainOption: string }> {
+    const current = await Store.getAll();
+    const updatedCustom = { ...current.customMap };
+    delete updatedCustom[name];
+
+    let newMainOption = current.mainOption;
+    if (newMainOption === name) {
+      newMainOption = DEFAULT_VALUE;
+      await Store.set("mainOption", DEFAULT_VALUE);
+    }
+
+    await Store.set("customMap", updatedCustom);
+    const merged = { ...current.alwaysExist, ...updatedCustom };
+    return { merged, newMainOption };
+  }
+
+  static async setFavorite(name: string): Promise<void> {
+    await Store.set("mainOption", name);
+  }
+
   static clearAll() {
     return browser.storage.local.clear();
   }

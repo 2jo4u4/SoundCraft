@@ -69,7 +69,7 @@ export function TopControlBar({
     statusLabel = browser.i18n.getMessage("statusCorsRestricted");
     statusColor = "error";
     statusIcon = <WarningAmberIcon fontSize="small" />;
-  } else if (mediaTotal > 1) {
+  } else if (mediaTotal > 0) {
     statusLabel = `${browser.i18n.getMessage("statusConnected")} (${mediaIndex}/${mediaTotal})`;
   }
 

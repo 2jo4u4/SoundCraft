@@ -1,11 +1,5 @@
 export type FilterType = BiquadFilterType;
 
-export interface FilterParam {
-  f: number;
-  q: number;
-  g?: number;
-}
-
 export interface Filter {
   hz: number;
   gain: number;
@@ -24,6 +18,13 @@ export interface FilterPreset {
 export type PresetMap = Record<string, FilterPreset>;
 
 export type AudioConnectionStatus = "connected" | "no_media" | "cors_restricted";
+
+export interface MediaPlaybackInfo {
+  status: AudioConnectionStatus;
+  mediaIndex: number;
+  mediaTotal: number;
+  bypass: boolean;
+}
 
 export interface MsgToFormat {
   open: null;
@@ -53,8 +54,6 @@ export interface SendMsg<T extends NotifyType = NotifyType> {
   type: T;
   data: MsgToFormat[T];
 }
-
-export type ActionType = "favorite" | "medialink" | "reset" | "save" | "delete";
 
 export interface StoreDataType {
   checkDataStatus?: { version: string };

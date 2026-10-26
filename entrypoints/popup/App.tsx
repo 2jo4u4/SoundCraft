@@ -37,14 +37,14 @@ const tabSize = { height: 36, minHeight: 36 };
 
 export function App({ storeData }: { storeData: Required<StoreDataType> }) {
   const [tabIndex, setTabIndex] = React.useState(0);
-  const [curr, setCurr] = React.useState(storeData.mainOption);
+  const [activePresetKey, setActivePresetKey] = React.useState(storeData.mainOption);
   const [favoriteOption, setFavoriteOption] = React.useState(storeData.mainOption);
   const [presets, setPresets] = React.useState<PresetMap>({
     ...storeData.alwaysExist,
     ...storeData.customMap,
   });
   const [mainFilter, setMainFilter] = React.useState<Filters>(() => {
-    const activePreset = presets[curr] || storeData.alwaysExist["default"];
+    const activePreset = presets[activePresetKey] || storeData.alwaysExist["default"];
     return cloneFilters(activePreset?.filters ?? []);
   });
 
@@ -53,8 +53,8 @@ export function App({ storeData }: { storeData: Required<StoreDataType> }) {
   const [mediaTotal, setMediaTotal] = React.useState(0);
   const [isBypassed, setIsBypassed] = React.useState(false);
 
-  const [ctrlDialog, setCtrlDialog] = React.useState(false);
-  const [ctrlAlert, setCtrlAlert] = React.useState<{
+  const [saveDialogOpen, setSaveDialogOpen] = React.useState(false);
+  const [alertNotice, setAlertNotice] = React.useState<{
     open: boolean;
     msg: string;
     type: "success" | "error";
@@ -66,16 +66,16 @@ export function App({ storeData }: { storeData: Required<StoreDataType> }) {
 
   // 判斷當前滑桿相對於選中預設是否有更動 (Dirty)
   const isDirty = React.useMemo(() => {
-    const target = presets[curr];
+    const target = presets[activePresetKey];
     if (!target?.filters) return false;
     return mainFilter.some((f, idx) => {
       const orig = target.filters[idx];
       return orig !== undefined && Math.abs(f.gain - orig.gain) > 0.01;
     });
-  }, [mainFilter, presets, curr]);
+  }, [mainFilter, presets, activePresetKey]);
 
-  const isCustom = !storeData.alwaysExist[curr];
-  const isFavorite = curr === favoriteOption;
+  const isCustom = !storeData.alwaysExist[activePresetKey];
+  const isFavorite = activePresetKey === favoriteOption;
 
   React.useEffect(() => {
     const messageListener = (msg: SendMsg) => {
@@ -85,9 +85,7 @@ export function App({ storeData }: { storeData: Required<StoreDataType> }) {
           if (data.filters && data.filters.length > 0) {
             setMainFilter(cloneFilters(data.filters));
           }
-          if (data.status) {
-            setAudioStatus(data.status);
-          }
+          if (data.status) setAudioStatus(data.status);
           if (data.mediaIndex !== undefined) setMediaIndex(data.mediaIndex);
           if (data.mediaTotal !== undefined) setMediaTotal(data.mediaTotal);
           if (data.bypass !== undefined) setIsBypassed(data.bypass);
@@ -115,9 +113,9 @@ export function App({ storeData }: { storeData: Required<StoreDataType> }) {
   }, []);
 
   const openAlert = (msg: string, type: "success" | "error" = "success") => {
-    setCtrlAlert({ open: true, msg, type });
+    setAlertNotice({ open: true, msg, type });
     setTimeout(() => {
-      setCtrlAlert(prev => ({ ...prev, open: false }));
+      setAlertNotice(prev => ({ ...prev, open: false }));
     }, 2000);
   };
 
@@ -135,7 +133,7 @@ export function App({ storeData }: { storeData: Required<StoreDataType> }) {
     if (!target) return;
 
     const cloned = cloneFilters(target.filters);
-    setCurr(key);
+    setActivePresetKey(key);
     setMainFilter(cloned);
     setPresets(updatedPresets);
 
@@ -160,8 +158,8 @@ export function App({ storeData }: { storeData: Required<StoreDataType> }) {
 
   // ★ 設為全域首選
   const handleFavorite = async () => {
-    await Store.set("mainOption", curr);
-    setFavoriteOption(curr);
+    await Store.setFavorite(activePresetKey);
+    setFavoriteOption(activePresetKey);
     openAlert(browser.i18n.getMessage("saveSuccess"), "success");
   };
 
@@ -169,24 +167,18 @@ export function App({ storeData }: { storeData: Required<StoreDataType> }) {
   const handleUpdate = async () => {
     if (!isCustom) return;
 
-    const currentStore = await Store.getAll();
-    const updatedCustom = {
-      ...currentStore.customMap,
-      [curr]: {
-        name: presets[curr]?.name || curr,
-        filters: cloneFilters(mainFilter),
-      },
-    };
+    const merged = await Store.saveCustomPreset(activePresetKey, {
+      name: presets[activePresetKey]?.name || activePresetKey,
+      filters: cloneFilters(mainFilter),
+    });
 
-    await Store.set("customMap", updatedCustom);
-    const merged: PresetMap = { ...currentStore.alwaysExist, ...updatedCustom };
     setPresets(merged);
     openAlert(browser.i18n.getMessage("saveSuccess"), "success");
   };
 
   // ⟲ 還原變更
   const handleRevert = () => {
-    const target = presets[curr];
+    const target = presets[activePresetKey];
     if (target) {
       const cloned = cloneFilters(target.filters);
       setMainFilter(cloned);
@@ -204,13 +196,9 @@ export function App({ storeData }: { storeData: Required<StoreDataType> }) {
       return;
     }
 
-    const currentStore = await Store.getAll();
-    const updatedCustom = { ...currentStore.customMap };
-    delete updatedCustom[curr];
-
-    await Store.set("customMap", updatedCustom);
-    const merged: PresetMap = { ...currentStore.alwaysExist, ...updatedCustom };
+    const { merged, newMainOption } = await Store.deleteCustomPreset(activePresetKey);
     setPresets(merged);
+    setFavoriteOption(newMainOption);
 
     openAlert(browser.i18n.getMessage("deleteSuccess"), "success");
     handleSetFilter("default", merged);
@@ -236,20 +224,15 @@ export function App({ storeData }: { storeData: Required<StoreDataType> }) {
       return;
     }
 
-    const updatedCustom = {
-      ...currentStore.customMap,
-      [filterName]: {
-        name: filterName,
-        filters: cloneFilters(mainFilter),
-      },
-    };
+    const merged = await Store.saveCustomPreset(filterName, {
+      name: filterName,
+      filters: cloneFilters(mainFilter),
+    });
 
-    await Store.set("customMap", updatedCustom);
-    const merged: PresetMap = { ...currentStore.alwaysExist, ...updatedCustom };
     setPresets(merged);
     openAlert(browser.i18n.getMessage("saveSuccess"), "success");
     handleSetFilter(filterName, merged);
-    setCtrlDialog(false);
+    setSaveDialogOpen(false);
   };
 
   return (
@@ -300,14 +283,14 @@ export function App({ storeData }: { storeData: Required<StoreDataType> }) {
             {/* 單行整合預設工具列 */}
             <InlinePresetBar
               presets={presets}
-              value={curr}
+              value={activePresetKey}
               onSelect={handleSetFilter}
               isFavorite={isFavorite}
               isCustom={isCustom}
               isDirty={isDirty}
               onFavorite={handleFavorite}
               onUpdate={handleUpdate}
-              onSaveAs={() => setCtrlDialog(true)}
+              onSaveAs={() => setSaveDialogOpen(true)}
               onRevert={handleRevert}
               onDelete={handleDelete}
             />
@@ -321,14 +304,14 @@ export function App({ storeData }: { storeData: Required<StoreDataType> }) {
       </Paper>
 
       {/* 訊息回饋 */}
-      <Collapse in={ctrlAlert.open}>
-        <Alert severity={ctrlAlert.type} sx={{ py: 0, px: 1, fontSize: "0.8rem" }}>
-          {ctrlAlert.msg}
+      <Collapse in={alertNotice.open}>
+        <Alert severity={alertNotice.type} sx={{ py: 0, px: 1, fontSize: "0.8rem" }}>
+          {alertNotice.msg}
         </Alert>
       </Collapse>
 
       {/* 另存為新預設對話框 */}
-      <Dialog open={ctrlDialog} onClose={() => setCtrlDialog(false)} maxWidth="xs" fullWidth>
+      <Dialog open={saveDialogOpen} onClose={() => setSaveDialogOpen(false)} maxWidth="xs" fullWidth>
         <Box component="form" onSubmit={handleSaveSubmit}>
           <DialogTitle>{browser.i18n.getMessage("saveDialogTitle")}</DialogTitle>
           <DialogContent>
@@ -345,7 +328,7 @@ export function App({ storeData }: { storeData: Required<StoreDataType> }) {
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => setCtrlDialog(false)}>
+            <Button onClick={() => setSaveDialogOpen(false)}>
               {browser.i18n.getMessage("cancel")}
             </Button>
             <Button type="submit" variant="contained">

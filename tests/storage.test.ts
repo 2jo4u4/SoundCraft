@@ -69,4 +69,33 @@ describe("Storage & Migration Seam", () => {
     const data = await Store.getAll();
     expect(data.mainOption).toBe("high-enhance");
   });
+
+  it("should save custom preset and serialize as plain object", async () => {
+    const merged = await Store.saveCustomPreset("jazz", {
+      filters: [{ hz: 60, gain: 3, q: 0.7, type: "peaking" }],
+    });
+    expect(merged["jazz"]).toBeDefined();
+    expect(merged["jazz"].filters[0]?.gain).toBe(3);
+
+    const stored = await Store.get("customMap");
+    expect(stored instanceof Map).toBe(false);
+    expect(typeof stored).toBe("object");
+  });
+
+  it("should reset mainOption to default when active favorite custom preset is deleted", async () => {
+    await Store.saveCustomPreset("dance", {
+      filters: [{ hz: 60, gain: 6, q: 0.7, type: "peaking" }],
+    });
+    await Store.setFavorite("dance");
+
+    const before = await Store.getAll();
+    expect(before.mainOption).toBe("dance");
+
+    const { newMainOption } = await Store.deleteCustomPreset("dance");
+    expect(newMainOption).toBe("default");
+
+    const after = await Store.getAll();
+    expect(after.mainOption).toBe("default");
+    expect(after.customMap["dance"]).toBeUndefined();
+  });
 });
