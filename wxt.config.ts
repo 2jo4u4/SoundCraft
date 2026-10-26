@@ -6,7 +6,7 @@ export default defineConfig({
   manifest: ({ browser }) => ({
     name: "__MSG_appName__",
     description: "__MSG_appDesc__",
-    default_locale: "zh",
+    default_locale: "en",
     permissions: ["activeTab", "storage"],
     icons: {
       32: "icons/ctrl-32.png",
