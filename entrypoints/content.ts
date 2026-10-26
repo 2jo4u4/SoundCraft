@@ -7,6 +7,7 @@ import {
   scoreMedia,
   extractMediaMetadata,
   buildDiscoveredMediaItem,
+  getDomain,
 } from "../utils";
 import type { AudioConnectionStatus, SendMsg, MsgToFormat, DiscoveredMediaItem } from "../utils";
 
@@ -424,6 +425,11 @@ export default defineContentScript({
         equalizer.setFilters(cloneFilters(mainPreset.filters));
       }
 
+      // 依當前網域讀取啟動/旁路狀態（首次開啟新網域預設為 Bypassed 旁路）
+      const domain = getDomain(window.location.hostname);
+      const isDomainActive = await Store.isDomainEnabled(domain);
+      equalizer.setBypass(!isDomainActive);
+
       // 嘗試初始連接
       await tryConnect();
 
@@ -476,7 +482,7 @@ export default defineContentScript({
       });
 
       // 4. 監聽來自 Popup 的指令
-      browser.runtime.onMessage.addListener((msg: SendMsg) => {
+      browser.runtime.onMessage.addListener(async (msg: SendMsg) => {
         switch (msg.type) {
           case "open": {
             const mediaList = getDiscoveredMediaList();
@@ -555,6 +561,8 @@ export default defineContentScript({
             if (equalizer && (activeMedia !== null || window === window.top)) {
               const data = msg.data as MsgToFormat["toggleBypass"];
               equalizer.setBypass(!data.enabled);
+              const domain = getDomain(window.location.hostname);
+              await Store.setDomainEnabled(domain, data.enabled);
               broadcastStatus();
             }
             break;

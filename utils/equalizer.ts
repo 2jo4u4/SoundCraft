@@ -8,9 +8,10 @@ export class Equalizer {
   currentMedia: HTMLMediaElement | null = null;
   currentSource: MediaElementAudioSourceNode | null = null;
   isStream: boolean = false;
-  isBypassed: boolean = false;
+  isBypassed: boolean = true;
 
-  constructor() {
+  constructor(initialBypassed: boolean = true) {
+    this.isBypassed = initialBypassed;
     const AudioContextClass =
       typeof window !== "undefined"
         ? window.AudioContext || (window as any).webkitAudioContext

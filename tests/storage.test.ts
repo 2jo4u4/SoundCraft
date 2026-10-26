@@ -98,4 +98,26 @@ describe("Storage & Migration Seam", () => {
     expect(after.mainOption).toBe("default");
     expect(after.customMap["dance"]).toBeUndefined();
   });
+
+  it("should default newly visited domains to Bypassed (false)", async () => {
+    // First time opening youtube.com or any new site: must be false (bypassed)
+    const isYoutubeEnabled = await Store.isDomainEnabled("www.youtube.com");
+    expect(isYoutubeEnabled).toBe(false);
+
+    const isBiliEnabled = await Store.isDomainEnabled("https://www.bilibili.com/video/BV1");
+    expect(isBiliEnabled).toBe(false);
+  });
+
+  it("should save and isolate domain enabled/bypassed states independently", async () => {
+    // Enable on YouTube
+    await Store.setDomainEnabled("www.youtube.com", true);
+    // Keep Bilibili bypassed (false)
+    await Store.setDomainEnabled("bilibili.com", false);
+
+    // Verify independent persistence
+    expect(await Store.isDomainEnabled("youtube.com")).toBe(true);
+    expect(await Store.isDomainEnabled("https://m.youtube.com/watch?v=123")).toBe(true);
+    expect(await Store.isDomainEnabled("www.bilibili.com")).toBe(false);
+    expect(await Store.isDomainEnabled("spotify.com")).toBe(false); // unvisited default
+  });
 });

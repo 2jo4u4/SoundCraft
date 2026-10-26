@@ -84,4 +84,5 @@ export interface StoreDataType {
   mainOption?: string;
   alwaysExist?: PresetMap;
   customMap?: PresetMap;
+  domainEnabledMap?: Record<string, boolean>;
 }

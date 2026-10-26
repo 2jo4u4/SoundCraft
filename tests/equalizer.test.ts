@@ -31,6 +31,7 @@ describe("Equalizer Audio Engine Seam", () => {
   it("should support true bypass switching", async () => {
     const mockMedia = {} as HTMLMediaElement;
     eq.setFilters([{ hz: 60, gain: 0, q: 0.7, type: "peaking" }]);
+    eq.setBypass(false); // engage EQ
     await eq.stream(mockMedia);
 
     // Initial state: connected to filter

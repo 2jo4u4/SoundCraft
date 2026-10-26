@@ -21,6 +21,8 @@ import {
   Store,
   sendMessageToCurrentTabs,
   cloneFilters,
+  getDomain,
+  getCurrentTab,
 } from "../../utils";
 import type {
   StoreDataType,
@@ -58,7 +60,7 @@ export function App({ storeData }: { storeData: Required<StoreDataType> }) {
   const [audioStatus, setAudioStatus] = React.useState<AudioConnectionStatus>("no_media");
   const [mediaIndex, setMediaIndex] = React.useState(0);
   const [mediaTotal, setMediaTotal] = React.useState(0);
-  const [isBypassed, setIsBypassed] = React.useState(false);
+  const [isBypassed, setIsBypassed] = React.useState(true);
   const [mediaList, setMediaList] = React.useState<DiscoveredMediaItem[]>([]);
 
   const [saveDialogOpen, setSaveDialogOpen] = React.useState(false);
@@ -139,6 +141,10 @@ export function App({ storeData }: { storeData: Required<StoreDataType> }) {
 
   const handleTogglePower = async (enabled: boolean) => {
     setIsBypassed(!enabled);
+    const tab = await getCurrentTab();
+    if (tab?.url) {
+      await Store.setDomainEnabled(getDomain(tab.url), enabled);
+    }
     await sendMessageToCurrentTabs("toggleBypass", { enabled });
   };
 

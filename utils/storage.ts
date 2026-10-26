@@ -2,6 +2,7 @@ import { browser } from "wxt/browser";
 import type { StoreDataType, PresetMap } from "./types";
 import { SYSTEM_PRESETS, DEFAULT_VALUE } from "./filterData";
 import { VERSION } from "./version";
+import { getDomain } from "./tool";
 
 export class Store {
   static async getAll(): Promise<Required<StoreDataType>> {
@@ -31,6 +32,7 @@ export class Store {
       mainOption,
       alwaysExist,
       customMap,
+      domainEnabledMap: raw.domainEnabledMap || {},
     };
   }
 
@@ -88,6 +90,41 @@ export class Store {
 
   static async setFavorite(name: string): Promise<void> {
     await Store.set("mainOption", name);
+  }
+
+  /**
+   * 查詢指定網域是否已啟用等化器（首次造訪之網域預設為 false 即 Bypassed）
+   */
+  static async isDomainEnabled(domain: string): Promise<boolean> {
+    const normDomain = getDomain(domain);
+    const raw = (await browser.storage.local.get("domainEnabledMap")) as {
+      domainEnabledMap?: Record<string, boolean>;
+    };
+    const map = raw?.domainEnabledMap || {};
+    return Boolean(map[normDomain]);
+  }
+
+  /**
+   * 儲存特定網域的啟用/旁路狀態
+   */
+  static async setDomainEnabled(domain: string, enabled: boolean): Promise<void> {
+    const normDomain = getDomain(domain);
+    const raw = (await browser.storage.local.get("domainEnabledMap")) as {
+      domainEnabledMap?: Record<string, boolean>;
+    };
+    const map = { ...(raw?.domainEnabledMap || {}) };
+    map[normDomain] = enabled;
+    await browser.storage.local.set({ domainEnabledMap: map });
+  }
+
+  /**
+   * 取得所有網域的狀態紀錄表
+   */
+  static async getDomainEnabledMap(): Promise<Record<string, boolean>> {
+    const raw = (await browser.storage.local.get("domainEnabledMap")) as {
+      domainEnabledMap?: Record<string, boolean>;
+    };
+    return raw?.domainEnabledMap || {};
   }
 
   static clearAll() {

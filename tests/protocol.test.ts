@@ -9,16 +9,18 @@ import type { MsgToFormat } from "../utils/types";
 describe("Message Protocol & Frame Routing Seam", () => {
   it("should format and handle toggleBypass message correctly", () => {
     const eq = new Equalizer();
-    expect(eq.isBypassed).toBe(false);
-
-    // Simulate handling toggleBypass message
-    const msg: MsgToFormat["toggleBypass"] = { enabled: false };
-    eq.setBypass(!msg.enabled);
+    // Default for newly created Equalizer is bypassed (per user requirement)
     expect(eq.isBypassed).toBe(true);
 
+    // Simulate handling toggleBypass message to enable
     const msgResume: MsgToFormat["toggleBypass"] = { enabled: true };
     eq.setBypass(!msgResume.enabled);
     expect(eq.isBypassed).toBe(false);
+
+    // Simulate handling toggleBypass message to bypass
+    const msg: MsgToFormat["toggleBypass"] = { enabled: false };
+    eq.setBypass(!msg.enabled);
+    expect(eq.isBypassed).toBe(true);
   });
 
   it("should format and apply ctrl gain adjustments to filter chain", () => {

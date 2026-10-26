@@ -63,3 +63,25 @@ export function isMediaCorsRestricted(media: HTMLMediaElement): boolean {
     return false;
   }
 }
+
+/**
+ * 擷取並標準化網域名稱（去除 www. 或 m. 前綴以利同網站設定共享）
+ */
+export function getDomain(urlOrHostname?: string): string {
+  if (!urlOrHostname) {
+    if (typeof window !== "undefined" && window.location?.hostname) {
+      urlOrHostname = window.location.hostname;
+    } else {
+      return "default";
+    }
+  }
+  try {
+    if (urlOrHostname.includes("://")) {
+      urlOrHostname = new URL(urlOrHostname).hostname;
+    }
+    const clean = urlOrHostname.toLowerCase();
+    return clean.replace(/^(www\.|m\.)/, "");
+  } catch {
+    return urlOrHostname.toLowerCase().replace(/^(www\.|m\.)/, "");
+  }
+}
