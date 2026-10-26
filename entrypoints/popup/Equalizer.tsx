@@ -388,86 +388,97 @@ export function PresetActionButtons({
   onDelete,
 }: PresetActionButtonsProps) {
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 0.8, mb: 1.5 }}>
-      {/* 第一列：★ 首選 / 💾 儲存 / ➕ 另存 */}
-      <Box sx={{ display: "flex", gap: 1 }}>
-        <Tooltip title={browser.i18n.getMessage("favorite")}>
+    <Box
+      sx={{
+        display: "grid",
+        gridTemplateColumns: "repeat(3, 1fr)",
+        gap: 0.8,
+        mb: 1.5,
+      }}
+    >
+      {/* 第 1 列第 1 欄：★ 首選 */}
+      <Tooltip title={browser.i18n.getMessage("favorite")}>
+        <Button
+          size="small"
+          variant="text"
+          startIcon={isFavorite ? <StarIcon /> : <StarBorderIcon />}
+          color={isFavorite ? "warning" : "inherit"}
+          onClick={onFavorite}
+          fullWidth
+          sx={{ py: 0.3, px: 0.5, fontSize: "0.75rem", textTransform: "none", whiteSpace: "nowrap" }}
+        >
+          {browser.i18n.getMessage("favoriteBtn" as any)}
+        </Button>
+      </Tooltip>
+
+      {/* 第 1 列第 2 欄：💾 儲存 */}
+      <Tooltip title={browser.i18n.getMessage("updatePreset" as any)}>
+        <Box component="span" sx={{ display: "flex", width: "100%" }}>
           <Button
             size="small"
             variant="text"
-            startIcon={isFavorite ? <StarIcon /> : <StarBorderIcon />}
-            color={isFavorite ? "warning" : "inherit"}
-            onClick={onFavorite}
-            sx={{ flex: 1, py: 0.3, px: 0.5, fontSize: "0.75rem", textTransform: "none", whiteSpace: "nowrap" }}
+            startIcon={<SaveIcon />}
+            disabled={!isCustom || !isDirty}
+            color={isDirty ? "primary" : "inherit"}
+            onClick={onUpdate}
+            fullWidth
+            sx={{ py: 0.3, px: 0.5, fontSize: "0.75rem", textTransform: "none", whiteSpace: "nowrap" }}
           >
-            {browser.i18n.getMessage("favoriteBtn" as any)}
+            {browser.i18n.getMessage("updateBtn" as any)}
           </Button>
-        </Tooltip>
+        </Box>
+      </Tooltip>
 
-        <Tooltip title={browser.i18n.getMessage("updatePreset" as any)}>
-          <span>
-            <Button
-              size="small"
-              variant="text"
-              startIcon={<SaveIcon />}
-              disabled={!isCustom || !isDirty}
-              color={isDirty ? "primary" : "inherit"}
-              onClick={onUpdate}
-              sx={{ flex: 1, py: 0.3, px: 0.5, fontSize: "0.75rem", textTransform: "none", whiteSpace: "nowrap" }}
-            >
-              {browser.i18n.getMessage("updateBtn" as any)}
-            </Button>
-          </span>
-        </Tooltip>
+      {/* 第 1 列第 3 欄：➕ 另存 */}
+      <Tooltip title={browser.i18n.getMessage("saveAsNew" as any)}>
+        <Button
+          size="small"
+          variant="text"
+          startIcon={<AddIcon />}
+          color="inherit"
+          onClick={onSaveAs}
+          fullWidth
+          sx={{ py: 0.3, px: 0.5, fontSize: "0.75rem", textTransform: "none", whiteSpace: "nowrap" }}
+        >
+          {browser.i18n.getMessage("saveAsBtn" as any)}
+        </Button>
+      </Tooltip>
 
-        <Tooltip title={browser.i18n.getMessage("saveAsNew" as any)}>
+      {/* 第 2 列第 1 欄：⟲ 還原 (對齊第 1 欄) */}
+      <Tooltip title={browser.i18n.getMessage("revertChanges" as any)}>
+        <Box component="span" sx={{ display: "flex", width: "100%" }}>
           <Button
             size="small"
             variant="text"
-            startIcon={<AddIcon />}
+            startIcon={<RestoreIcon />}
+            disabled={!isDirty}
             color="inherit"
-            onClick={onSaveAs}
-            sx={{ flex: 1, py: 0.3, px: 0.5, fontSize: "0.75rem", textTransform: "none", whiteSpace: "nowrap" }}
+            onClick={onRevert}
+            fullWidth
+            sx={{ py: 0.3, px: 0.5, fontSize: "0.75rem", textTransform: "none", whiteSpace: "nowrap" }}
           >
-            {browser.i18n.getMessage("saveAsBtn" as any)}
+            {browser.i18n.getMessage("revertBtn" as any)}
           </Button>
-        </Tooltip>
-      </Box>
+        </Box>
+      </Tooltip>
 
-      {/* 第二列：⟲ 還原 / 🗑 刪除 */}
-      <Box sx={{ display: "flex", gap: 1 }}>
-        <Tooltip title={browser.i18n.getMessage("revertChanges" as any)}>
-          <span>
-            <Button
-              size="small"
-              variant="text"
-              startIcon={<RestoreIcon />}
-              disabled={!isDirty}
-              color="inherit"
-              onClick={onRevert}
-              sx={{ flex: 1, py: 0.3, px: 0.5, fontSize: "0.75rem", textTransform: "none", whiteSpace: "nowrap" }}
-            >
-              {browser.i18n.getMessage("revertBtn" as any)}
-            </Button>
-          </span>
-        </Tooltip>
-
-        <Tooltip title={browser.i18n.getMessage("delete")}>
-          <span>
-            <Button
-              size="small"
-              variant="text"
-              startIcon={<DeleteForeverIcon />}
-              disabled={!isCustom}
-              color="error"
-              onClick={onDelete}
-              sx={{ flex: 1, py: 0.3, px: 0.5, fontSize: "0.75rem", textTransform: "none", whiteSpace: "nowrap" }}
-            >
-              {browser.i18n.getMessage("deleteBtn" as any)}
-            </Button>
-          </span>
-        </Tooltip>
-      </Box>
+      {/* 第 2 列第 2 欄：🗑 刪除 (對齊第 2 欄) */}
+      <Tooltip title={browser.i18n.getMessage("delete")}>
+        <Box component="span" sx={{ display: "flex", width: "100%" }}>
+          <Button
+            size="small"
+            variant="text"
+            startIcon={<DeleteForeverIcon />}
+            disabled={!isCustom}
+            color="error"
+            onClick={onDelete}
+            fullWidth
+            sx={{ py: 0.3, px: 0.5, fontSize: "0.75rem", textTransform: "none", whiteSpace: "nowrap" }}
+          >
+            {browser.i18n.getMessage("deleteBtn" as any)}
+          </Button>
+        </Box>
+      </Tooltip>
     </Box>
   );
 }
