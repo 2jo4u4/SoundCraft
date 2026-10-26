@@ -112,7 +112,14 @@ export default defineContentScript({
         currentStatus = "no_media";
         activeMedia = null;
         activeMediaIndex = 0;
-        broadcastStatus();
+        // 子 iframe 無媒體時徹底保持靜默；頂層 Frame 則延遲 200ms 確認無子 Frame 回應後才廣播
+        if (window === window.top) {
+          setTimeout(() => {
+            if (activeMedia === null && scanMediaElements().length === 0) {
+              broadcastStatus();
+            }
+          }, 200);
+        }
         return;
       }
 
@@ -140,7 +147,14 @@ export default defineContentScript({
         currentStatus = "no_media";
         activeMedia = null;
         activeMediaIndex = 0;
-        broadcastStatus();
+        // 子 iframe 無媒體時徹底保持靜默；頂層 Frame 則延遲 200ms 確認無子 Frame 回應後才廣播
+        if (window === window.top) {
+          setTimeout(() => {
+            if (activeMedia === null && scanMediaElements().length === 0) {
+              broadcastStatus();
+            }
+          }, 200);
+        }
         return;
       }
 
@@ -504,7 +518,10 @@ export default defineContentScript({
           }
 
           case "autoSelectBest": {
-            autoSelectBest();
+            const mediaList = scanMediaElements();
+            if (mediaList.length > 0 || window === window.top) {
+              autoSelectBest();
+            }
             break;
           }
 

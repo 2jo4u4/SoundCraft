@@ -102,6 +102,14 @@ export function App({ storeData }: { storeData: Required<StoreDataType> }) {
         }
         case "statusUpdate": {
           const data = msg.data as MsgToFormat["statusUpdate"];
+          // 防禦保護：若 Popup 當前已連線至媒體，忽略來自無媒體來源的降級覆蓋（避免多 Frame 競爭）
+          if (
+            audioStatus === "connected" &&
+            data.status === "no_media" &&
+            (!data.mediaList || data.mediaList.length === 0)
+          ) {
+            break;
+          }
           if (data.status) setAudioStatus(data.status);
           if (data.mediaIndex !== undefined) setMediaIndex(data.mediaIndex);
           if (data.mediaTotal !== undefined) setMediaTotal(data.mediaTotal);
