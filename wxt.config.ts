@@ -11,6 +11,7 @@ export default defineConfig({
     icons: {
       32: "icons/ctrl-32.png",
       64: "icons/ctrl-64.png",
+      128: "icons/ctrl-128.png",
     },
     action: {
       default_icon: "icons/ctrl-32.png",
