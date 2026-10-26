@@ -1,0 +1,30 @@
+import { defineConfig } from "wxt";
+
+export default defineConfig({
+  manifestVersion: 3,
+  modules: ["@wxt-dev/module-react"],
+  manifest: ({ browser }) => ({
+    name: "__MSG_appName__",
+    description: "__MSG_appDesc__",
+    default_locale: "zh",
+    permissions: ["activeTab", "storage"],
+    icons: {
+      32: "icons/ctrl-32.png",
+      64: "icons/ctrl-64.png",
+    },
+    action: {
+      default_icon: "icons/ctrl-32.png",
+      default_title: "__MSG_appName__",
+    },
+    ...(browser === "firefox"
+      ? {
+          browser_specific_settings: {
+            gecko: {
+              id: "9ab0tom1z@mozmail.com",
+              strict_min_version: "109.0",
+            },
+          },
+        }
+      : {}),
+  }),
+});

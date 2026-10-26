@@ -1,0 +1,178 @@
+{
+  "appName": {
+    "message": "Equalizer 音訊等化器",
+    "description": "擴充功能名稱"
+  },
+  "appDesc": {
+    "message": "為瀏覽器中的影片與音訊提供高品質的 5 頻段等化器與自訂預設",
+    "description": "擴充功能描述"
+  },
+  "equalizer": {
+    "message": "等化器",
+    "description": "等化器"
+  },
+  "save": {
+    "message": "保存設定",
+    "description": "保存設定"
+  },
+  "reset": {
+    "message": "重置",
+    "description": "重置"
+  },
+  "medialink": {
+    "message": "重新連接音訊",
+    "description": "連接音訊"
+  },
+  "delete": {
+    "message": "刪除等化器設定",
+    "description": "刪除等化器設定"
+  },
+  "favorite": {
+    "message": "設為全域首選",
+    "description": "首選等化器"
+  },
+  "saveError1": {
+    "message": "與系統預設名稱重複，請變更名稱",
+    "description": "與系統名稱重複"
+  },
+  "saveError2": {
+    "message": "該名稱已存在，請選擇其他名稱或先刪除舊設定",
+    "description": "名稱已存在"
+  },
+  "saveSuccess": {
+    "message": "儲存成功",
+    "description": "新增成功"
+  },
+  "deleteSuccess": {
+    "message": "刪除成功",
+    "description": "刪除成功"
+  },
+  "deleteFail": {
+    "message": "刪除失敗（系統預設無法刪除）",
+    "description": "刪除失敗"
+  },
+  "saveDialogTitle": {
+    "message": "命名等化器預設",
+    "description": "命名等化器"
+  },
+  "saveDialogField": {
+    "message": "等化器名稱",
+    "description": "等化器名稱欄位"
+  },
+  "confirm": {
+    "message": "確定",
+    "description": "確定"
+  },
+  "cancel": {
+    "message": "取消",
+    "description": "取消"
+  },
+  "cencel": {
+    "message": "取消",
+    "description": "舊版相容"
+  },
+  "help": {
+    "message": "頻段說明",
+    "description": "功能說明"
+  },
+  "aboutEqualizer": {
+    "message": "頻率調整導引",
+    "description": "關於等化器"
+  },
+  "60HZ": {
+    "message": "重低音（超低頻，重低音打擊感）",
+    "description": "低音增益"
+  },
+  "230HZ": {
+    "message": "低音與低頻和聲，可感受音質厚度",
+    "description": "低音增益"
+  },
+  "910HZ": {
+    "message": "中頻核心，人聲與主要樂器本體",
+    "description": "中間增益"
+  },
+  "4000HZ": {
+    "message": "高頻前段，人聲齒音與樂器清晰度",
+    "description": "高音增益"
+  },
+  "14000HZ": {
+    "message": "超高頻空氣感與細節泛音",
+    "description": "高音增益"
+  },
+  "statusConnected": {
+    "message": "音訊已連線",
+    "description": "狀態指示器：已連線"
+  },
+  "statusNoMedia": {
+    "message": "未偵測到播放中的媒體",
+    "description": "狀態指示器：未找到媒體"
+  },
+  "statusCorsRestricted": {
+    "message": "音訊受 CORS 跨域限制",
+    "description": "狀態指示器：受限"
+  },
+  "eqPower": {
+    "message": "等化器開關",
+    "description": "等化器總開關"
+  },
+  "eqEnabled": {
+    "message": "開啟",
+    "description": "開關開啟"
+  },
+  "eqBypassed": {
+    "message": "旁路 (關閉)",
+    "description": "開關關閉"
+  },
+  "updatePreset": {
+    "message": "儲存變更 (覆蓋)",
+    "description": "覆蓋儲存當前預設"
+  },
+  "saveAsNew": {
+    "message": "另存為新預設",
+    "description": "另存為全新預設"
+  },
+  "revertChanges": {
+    "message": "還原至預設值",
+    "description": "還原滑桿至預設"
+  },
+  "rescanMedia": {
+    "message": "重新偵測 / 切換下一個音源",
+    "description": "重整或輪替媒體"
+  },
+  "defaultEqualize": {
+    "message": "標準等化 (系統)",
+    "description": "預設等化器"
+  },
+  "defaultEuqalize": {
+    "message": "標準等化 (系統)",
+    "description": "舊版相容 key"
+  },
+  "lowEnhance": {
+    "message": "低頻強化 (系統)",
+    "description": "低頻強化"
+  },
+  "highEnhance": {
+    "message": "高頻強化 (系統)",
+    "description": "高頻強化"
+  },
+  "heightEnhance": {
+    "message": "高頻強化 (系統)",
+    "description": "舊版相容 key"
+  },
+  "volumeEnhance": {
+    "message": "音量強化 (系統)",
+    "description": "音量強化"
+  },
+  "lowReduce": {
+    "message": "低頻衰減 (系統)",
+    "description": "低頻衰減"
+  },
+  "highReduce": {
+    "message": "高頻衰減 (系統)",
+    "description": "高頻衰減"
+  },
+  "heightReduce": {
+    "message": "高頻衰減 (系統)",
+    "description": "舊版相容 key"
+  }
+}

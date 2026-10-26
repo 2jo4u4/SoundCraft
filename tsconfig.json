@@ -1,0 +1,13 @@
+{
+  "extends": "./.wxt/tsconfig.json",
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "skipLibCheck": true,
+    "lib": ["DOM", "DOM.Iterable", "ESNext"]
+  },
+  "exclude": ["legacy_src", "node_modules", ".output", "tests"]
+}

@@ -1,0 +1,178 @@
+{
+  "appName": {
+    "message": "Equalizer - Audio EQ",
+    "description": "Extension name"
+  },
+  "appDesc": {
+    "message": "High-quality 5-band audio equalizer with custom presets for browser videos and audios",
+    "description": "Extension description"
+  },
+  "equalizer": {
+    "message": "Equalizer",
+    "description": "Equalizer tab title"
+  },
+  "save": {
+    "message": "Save Preset",
+    "description": "Save current EQ as preset"
+  },
+  "reset": {
+    "message": "Reset",
+    "description": "Reset sliders to preset defaults"
+  },
+  "medialink": {
+    "message": "Reconnect Audio",
+    "description": "Reconnect to media element"
+  },
+  "delete": {
+    "message": "Delete Preset",
+    "description": "Delete custom preset"
+  },
+  "favorite": {
+    "message": "Set as Global Default",
+    "description": "Set as preferred preset"
+  },
+  "saveError1": {
+    "message": "Cannot overwrite system preset name. Please choose a different name.",
+    "description": "System preset name collision"
+  },
+  "saveError2": {
+    "message": "This preset name already exists. Please choose another name or delete the existing one.",
+    "description": "Custom preset name collision"
+  },
+  "saveSuccess": {
+    "message": "Preset saved successfully",
+    "description": "Save success message"
+  },
+  "deleteSuccess": {
+    "message": "Preset deleted successfully",
+    "description": "Delete success message"
+  },
+  "deleteFail": {
+    "message": "Cannot delete system default presets",
+    "description": "Delete fail message"
+  },
+  "saveDialogTitle": {
+    "message": "Save Custom Preset",
+    "description": "Dialog title"
+  },
+  "saveDialogField": {
+    "message": "Preset Name",
+    "description": "Preset name textfield label"
+  },
+  "confirm": {
+    "message": "Confirm",
+    "description": "Confirm button"
+  },
+  "cancel": {
+    "message": "Cancel",
+    "description": "Cancel button"
+  },
+  "cencel": {
+    "message": "Cancel",
+    "description": "Backward compatibility"
+  },
+  "help": {
+    "message": "Frequency Guide",
+    "description": "Help tab title"
+  },
+  "aboutEqualizer": {
+    "message": "About Equalizer Frequencies",
+    "description": "Help header"
+  },
+  "60HZ": {
+    "message": "Sub-bass boost for punch and rumble",
+    "description": "60Hz description"
+  },
+  "230HZ": {
+    "message": "Bass and low harmonics, adding body and warmth",
+    "description": "230Hz description"
+  },
+  "910HZ": {
+    "message": "Mid-range core, presence of vocals and main instruments",
+    "description": "910Hz description"
+  },
+  "4000HZ": {
+    "message": "Treble and speech clarity / articulation",
+    "description": "4000Hz description"
+  },
+  "14000HZ": {
+    "message": "Ultra-high sparkle, airiness and harmonic details",
+    "description": "14000Hz description"
+  },
+  "statusConnected": {
+    "message": "Audio Connected",
+    "description": "Status: connected"
+  },
+  "statusNoMedia": {
+    "message": "No Active Media",
+    "description": "Status: no media"
+  },
+  "statusCorsRestricted": {
+    "message": "CORS Audio Restricted",
+    "description": "Status: cors restricted"
+  },
+  "eqPower": {
+    "message": "EQ Power",
+    "description": "EQ power toggle"
+  },
+  "eqEnabled": {
+    "message": "ON",
+    "description": "Power on"
+  },
+  "eqBypassed": {
+    "message": "Bypass (OFF)",
+    "description": "Power off"
+  },
+  "updatePreset": {
+    "message": "Update Preset (Overwrite)",
+    "description": "Overwrite current preset"
+  },
+  "saveAsNew": {
+    "message": "Save As New Preset",
+    "description": "Save as new preset"
+  },
+  "revertChanges": {
+    "message": "Revert to Preset Defaults",
+    "description": "Revert sliders"
+  },
+  "rescanMedia": {
+    "message": "Rescan & Cycle Next Audio Source",
+    "description": "Rescan or cycle audio source"
+  },
+  "defaultEqualize": {
+    "message": "Standard Flat (System)",
+    "description": "Default preset"
+  },
+  "defaultEuqalize": {
+    "message": "Standard Flat (System)",
+    "description": "Backward compat"
+  },
+  "lowEnhance": {
+    "message": "Bass Boost (System)",
+    "description": "Bass boost preset"
+  },
+  "highEnhance": {
+    "message": "Treble Boost (System)",
+    "description": "Treble boost preset"
+  },
+  "heightEnhance": {
+    "message": "Treble Boost (System)",
+    "description": "Backward compat"
+  },
+  "volumeEnhance": {
+    "message": "Vocal / Volume Boost (System)",
+    "description": "Volume boost preset"
+  },
+  "lowReduce": {
+    "message": "Bass Cut (System)",
+    "description": "Bass cut preset"
+  },
+  "highReduce": {
+    "message": "Treble Cut (System)",
+    "description": "Treble cut preset"
+  },
+  "heightReduce": {
+    "message": "Treble Cut (System)",
+    "description": "Backward compat"
+  }
+}
