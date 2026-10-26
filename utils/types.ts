@@ -42,6 +42,10 @@ export interface MediaPlaybackInfo {
   bypass: boolean;
 }
 
+export type CtrlPayload =
+  | { gains: { index: number; val: number }[]; presetKey?: string }
+  | { index: number; val: number }[];
+
 export interface MsgToFormat {
   open: null;
   initUI: {
@@ -51,9 +55,10 @@ export interface MsgToFormat {
     mediaTotal: number;
     bypass: boolean;
     mediaList?: DiscoveredMediaItem[];
+    activePresetKey?: string;
   };
   connect: { cycle?: boolean } | null;
-  ctrl: { index: number; val: number }[];
+  ctrl: CtrlPayload;
   statusUpdate: {
     status: AudioConnectionStatus;
     mediaIndex: number;

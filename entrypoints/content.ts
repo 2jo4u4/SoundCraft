@@ -23,6 +23,7 @@ export default defineContentScript({
     let activeMediaIndex: number = 0;
     let isPickerActive: boolean = false;
     let cleanupPicker: (() => void) | null = null;
+    let activePresetKey: string = "default";
     const detachedMediaElements = new Set<HTMLMediaElement>();
 
     function isAudible(media: HTMLMediaElement | null): boolean {
@@ -483,6 +484,7 @@ export default defineContentScript({
     // 初始化儲存與濾波器
     async function init() {
       const store = await Store.initStorage();
+      activePresetKey = store.mainOption || "default";
       equalizer = new Equalizer();
 
       const mainPreset =
@@ -580,6 +582,7 @@ export default defineContentScript({
                 mediaTotal: discoveredMedia.length,
                 bypass: equalizer ? equalizer.isBypassed : false,
                 mediaList,
+                activePresetKey,
               });
             } else if (window === window.top) {
               // 若頂層 Frame 無媒體，延遲 150ms 響應，避免覆蓋子 iframe 已連線狀態
@@ -592,6 +595,7 @@ export default defineContentScript({
                     mediaTotal: 0,
                     bypass: equalizer ? equalizer.isBypassed : false,
                     mediaList: [],
+                    activePresetKey,
                   });
                 }
               }, 150);
@@ -654,8 +658,19 @@ export default defineContentScript({
           }
 
           case "ctrl": {
-            if (equalizer && activeMedia !== null) {
-              const gains = msg.data as MsgToFormat["ctrl"];
+            const data = msg.data as MsgToFormat["ctrl"];
+            let gains: { index: number; val: number }[] | undefined;
+            if (Array.isArray(data)) {
+              gains = data;
+            } else if (data && typeof data === "object") {
+              if (data.presetKey) {
+                activePresetKey = data.presetKey;
+              }
+              if (Array.isArray(data.gains)) {
+                gains = data.gains;
+              }
+            }
+            if (equalizer && gains && gains.length > 0) {
               equalizer.updateGains(gains);
             }
             break;

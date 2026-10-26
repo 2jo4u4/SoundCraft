@@ -92,6 +92,9 @@ export function App({ storeData }: { storeData: Required<StoreDataType> }) {
       switch (msg.type) {
         case "initUI": {
           const data = msg.data as MsgToFormat["initUI"];
+          if (data.activePresetKey) {
+            setActivePresetKey(data.activePresetKey);
+          }
           if (data.filters && data.filters.length > 0) {
             setMainFilter(cloneFilters(data.filters));
           }
@@ -174,10 +177,10 @@ export function App({ storeData }: { storeData: Required<StoreDataType> }) {
     setMainFilter(cloned);
     setPresets(updatedPresets);
 
-    sendMessageToCurrentTabs(
-      "ctrl",
-      cloned.map(({ gain }, index) => ({ index, val: gain }))
-    );
+    sendMessageToCurrentTabs("ctrl", {
+      presetKey: key,
+      gains: cloned.map(({ gain }, index) => ({ index, val: gain })),
+    });
   };
 
   const handleMainFilterChange = (index: number, newVal: number) => {
@@ -190,7 +193,10 @@ export function App({ storeData }: { storeData: Required<StoreDataType> }) {
       return updated;
     });
 
-    sendMessageToCurrentTabs("ctrl", [{ index, val: clamped }]);
+    sendMessageToCurrentTabs("ctrl", {
+      presetKey: activePresetKey,
+      gains: [{ index, val: clamped }],
+    });
   };
 
   // ★ 設為全域首選
@@ -219,10 +225,10 @@ export function App({ storeData }: { storeData: Required<StoreDataType> }) {
     if (target) {
       const cloned = cloneFilters(target.filters);
       setMainFilter(cloned);
-      sendMessageToCurrentTabs(
-        "ctrl",
-        cloned.map(({ gain }, index) => ({ index, val: gain }))
-      );
+      sendMessageToCurrentTabs("ctrl", {
+        presetKey: activePresetKey,
+        gains: cloned.map(({ gain }, index) => ({ index, val: gain })),
+      });
     }
   };
 
