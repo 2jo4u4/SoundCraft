@@ -22,6 +22,9 @@ export default defineConfig({
             gecko: {
               id: "9ab0tom1z@mozmail.com",
               strict_min_version: "109.0",
+              data_collection_permissions: {
+                required: ["none"],
+              },
             },
           },
         }
