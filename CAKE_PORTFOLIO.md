@@ -8,6 +8,18 @@
 
 ---
 
+## 📸 產品實機截圖 (Showcase Gallery)
+
+| 畫面 | 截圖預覽 | 技術與互動亮點 |
+| :--- | :---: | :--- |
+| **01. 主面板 Hero** | ![01_hero_equalizer](./release/portfolio_screenshots/01_hero_equalizer.png) | 現代化 Material-UI 淺色介面、精準 3 欄式按鈕佈局（Favorite、Save、Save As、Revert、Delete）、5 頻段垂直滑桿與 0dB 虛線基準刻度。 |
+| **02. 畫面元素拾取** | ![03_inpage_picker_overlay](./release/portfolio_screenshots/03_inpage_picker_overlay.jpg) | 深入網頁 DOM 的視覺化巡檢 Overlay，懸停於播放器時自動呈現藍色虛線邊框與浮動徽章，支援無損事件攔截一鍵繫結。 |
+| **03. 智慧媒體選單** | ![02_media_picker_menu](./release/portfolio_screenshots/02_media_picker_menu.png) | 即時掃描 DOM 與 Shadow DOM 媒體，呈現真實標題、解析度與即時播放狀態（🟢 發聲中 / ⏸️ 已暫停），並標註最佳推薦。 |
+| **04. 系統預設集** | ![04_preset_selector_menu](./release/portfolio_screenshots/04_preset_selector_menu.png) | 內建標準平直（Flat）、低頻強化（Bass Boost）、高頻強化（Treble Boost）、人聲強化（Vocal Boost）等專業系統調音檔。 |
+| **05. 頻段專業導引** | ![05_band_guide](./release/portfolio_screenshots/05_band_guide.png) | 完整收錄 60Hz 重低音、230Hz 低頻厚度、910Hz 人聲核心、4kHz 清晰度到 14kHz 空氣感等聲學調整教育指引。 |
+
+---
+
 ## 💼 履歷精華亮點 (Resume Bullet Points)
 
 - **核心音訊工程**：使用 **Web Audio API** 實作 5 頻段雙二次濾波器鏈（BiquadFilter）與動態壓縮峰值限制器（DynamicsCompressor），支援 -12dB ~ +12dB 即時無破音增益調整，並實作 **硬體級透明旁路直通（True Bypass）**，關閉時訊號 0 毫秒延遲直通輸出。
