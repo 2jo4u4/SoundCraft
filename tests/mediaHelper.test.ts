@@ -131,6 +131,31 @@ describe("MediaHelper - Scoring & Extraction", () => {
     expect(meta.type).toBe("audio");
   });
 
+  it("should extract Spotify Web v2 metadata correctly with aria-label", () => {
+    const fakeDoc = {
+      location: { hostname: "open.spotify.com" },
+      querySelector: (selector: string) => {
+        if (selector === '[data-testid="now-playing-widget-v2"]') {
+          return {
+            getAttribute: (attr: string) =>
+              attr === "aria-label" ? "Now playing: Gurenge by LiSA" : null,
+          };
+        }
+        return null;
+      },
+      title: "Spotify - Web Player",
+    } as unknown as Document;
+
+    const fakeMedia = {
+      tagName: "VIDEO", // Spotify uses detached video
+    } as any;
+
+    const meta = extractMediaMetadata(fakeMedia, fakeDoc);
+    expect(meta.title).toBe("Gurenge");
+    expect(meta.subtitle).toBe("LiSA");
+    expect(meta.type).toBe("audio");
+  });
+
   it("should build DiscoveredMediaItem properly", () => {
     const fakeVideo = {
       tagName: "VIDEO",

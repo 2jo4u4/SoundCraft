@@ -87,21 +87,51 @@ export function extractMediaMetadata(
     };
   }
 
-  // 3. Spotify Web 深度優化
+  // 3. Spotify Web 深度優化 (相容 v1 與 v2 播放器)
   if (hostname.includes("spotify.com")) {
-    const trackTitle =
-      doc.querySelector('[data-testid="now-playing-widget"] [data-testid="context-item-info-title"]')?.textContent?.trim() ||
-      doc.querySelector('[data-testid="context-item-info-title"]')?.textContent?.trim() ||
-      "Spotify 歌曲";
-    const trackArtist =
-      doc.querySelector('[data-testid="now-playing-widget"] [data-testid="context-item-info-artist"]')?.textContent?.trim() ||
-      doc.querySelector('[data-testid="context-item-info-subtitles"]')?.textContent?.trim() ||
-      "Spotify";
+    let trackTitle = "";
+    let trackArtist = "";
+
+    // 優先從 v2 播放器小工具或 aria-label 擷取
+    const widgetV2 = doc.querySelector?.('[data-testid="now-playing-widget-v2"]');
+    if (widgetV2) {
+      const ariaLabel = widgetV2.getAttribute("aria-label"); // "Now playing: <Title> by <Artist>"
+      if (ariaLabel && ariaLabel.startsWith("Now playing:")) {
+        const cleaned = ariaLabel.replace(/^Now playing:\s*/, "");
+        const parts = cleaned.split(" by ");
+        if (parts.length >= 2) {
+          trackTitle = parts[0]?.trim() || "";
+          trackArtist = parts.slice(1).join(" by ").trim();
+        } else {
+          trackTitle = cleaned.trim();
+        }
+      }
+
+      if (!trackArtist) {
+        trackArtist = doc.querySelector?.('[data-testid="now-playing-widget-v2-byline"]')?.textContent?.trim() || "";
+      }
+    }
+
+    if (!trackTitle) {
+      trackTitle =
+        doc.querySelector?.('[data-testid="now-playing-widget-v2"] a[href*="/album/"] span')?.textContent?.trim() ||
+        doc.querySelector?.('[data-testid="now-playing-widget-v2"] a[href*="/track/"] span')?.textContent?.trim() ||
+        doc.querySelector?.('[data-testid="now-playing-widget"] [data-testid="context-item-info-title"]')?.textContent?.trim() ||
+        doc.querySelector?.('[data-testid="context-item-info-title"]')?.textContent?.trim() ||
+        "Spotify 歌曲";
+    }
+
+    if (!trackArtist) {
+      trackArtist =
+        doc.querySelector?.('[data-testid="now-playing-widget"] [data-testid="context-item-info-artist"]')?.textContent?.trim() ||
+        doc.querySelector?.('[data-testid="context-item-info-subtitles"]')?.textContent?.trim() ||
+        "Spotify";
+    }
 
     return {
       title: trackTitle,
       subtitle: trackArtist,
-      type,
+      type: "audio", // 儘管 Spotify 底層使用 detached video 載體，對使用者呈現為音訊
     };
   }
 

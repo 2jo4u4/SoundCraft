@@ -23,6 +23,25 @@ export default defineContentScript({
     let activeMediaIndex: number = 0;
     let isPickerActive: boolean = false;
     let cleanupPicker: (() => void) | null = null;
+    const detachedMediaElements = new Set<HTMLMediaElement>();
+
+    // 攔截 HTMLMediaElement 原型方法，精準捕獲未掛載至 DOM 的背景離線媒體（如 Spotify Web 播放器）
+    try {
+      const origPlay = HTMLMediaElement.prototype.play;
+      HTMLMediaElement.prototype.play = function (this: HTMLMediaElement) {
+        if (!detachedMediaElements.has(this)) {
+          detachedMediaElements.add(this);
+          if (!activeMedia || activeMedia.paused) {
+            attachToMedia(this);
+          } else {
+            broadcastStatus();
+          }
+        }
+        return origPlay.call(this);
+      };
+    } catch (e) {
+      console.debug("[Equalizer] Prototype play hook error:", e);
+    }
 
     // 取得所有 DOM（包含 Open Shadow DOM）內的媒體元素
     function scanMediaElements(root: Node = document): HTMLMediaElement[] {
@@ -43,6 +62,14 @@ export default defineContentScript({
       }
 
       traverse(root);
+
+      // 合併已捕獲的未掛載離線媒體（例如 Spotify 的 detached video）
+      for (const detached of detachedMediaElements) {
+        if (!results.includes(detached)) {
+          results.push(detached);
+        }
+      }
+
       return results;
     }
 
@@ -246,11 +273,15 @@ export default defineContentScript({
       highlightBox.appendChild(badge);
       document.body.appendChild(highlightBox);
 
-      // 3. 檢查是否有隱藏式背景音訊（例如 Spotify 或 0x0 音訊標籤）
+      // 3. 檢查是否有隱藏式背景音訊（例如 Spotify 離線媒體或 0x0 音訊標籤）
       discoveredMedia = scanMediaElements();
       const hiddenAudio = discoveredMedia.find(el => {
         const rect = el.getBoundingClientRect();
-        return el instanceof HTMLAudioElement || (rect.width === 0 && rect.height === 0);
+        return (
+          !el.isConnected ||
+          el instanceof HTMLAudioElement ||
+          (rect.width === 0 && rect.height === 0)
+        );
       });
 
       let floatingPill: HTMLDivElement | null = null;
@@ -309,14 +340,21 @@ export default defineContentScript({
           return { media: target, container: target };
         }
 
-        // 常見主流播放器容器 (YouTube, Bilibili, Twitch, etc.)
+        // 常見主流播放器容器 (YouTube, Bilibili, Twitch, Spotify 等)
         const container = target.closest(
-          ".html5-video-player, #movie_player, .bpx-player-video-wrap, .bilibili-player-video, .video-player__container, [data-testid='now-playing-widget']"
+          ".html5-video-player, #movie_player, .bpx-player-video-wrap, .bilibili-player-video, .video-player__container, [data-testid='now-playing-widget-v2'], [data-testid='now-playing-widget'], [data-testid='now-playing-bar'], [data-testid='player-controls']"
         );
         if (container) {
           const innerMedia = container.querySelector("video, audio");
           if (innerMedia instanceof HTMLMediaElement) {
             return { media: innerMedia, container };
+          }
+          // 支援 Spotify：播放列本身未掛載 media 標籤，匹配已捕獲的離線媒體
+          const detached = discoveredMedia.find(
+            el => !el.isConnected || el.duration > 15 || !el.muted
+          );
+          if (detached) {
+            return { media: detached, container };
           }
         }
 
