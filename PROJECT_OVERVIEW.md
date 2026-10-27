@@ -12,7 +12,7 @@
 3. [核心音訊架構與 DSP 引擎 (Audio DSP Architecture)](#3-核心音訊架構與-dsp-引擎)
 4. [智慧媒體探索與視覺化拾取 (Smart Media Discovery & Overlay Picker)](#4-智慧媒體探索與視覺化拾取)
 5. [Spotify 離線音訊攔截與發聲優先權技術 (Spotify & Media Priority)](#5-spotify-離線音訊攔截與發聲優先權技術)
-6. [多分頁獨立狀態架構 — 模式甲 (Per-Tab Preset Synchronization)](#6-多分頁獨立狀態架構--模式甲)
+6. [多分頁獨立狀態架構 (Per-Tab Preset Synchronization)](#6-多分頁獨立狀態架構)
 7. [多 Frame 通訊防禦協定 (Multi-Frame Silence Guard Protocol)](#7-多-frame-通訊防禦協定)
 8. [UI/UX 設計系統與操作互動 (Design System & Controls)](#8-uiux-設計系統與操作互動)
 9. [雙平台商店上架與審核資料庫 (Store Listings & AMO Reviewer Pack)](#9-雙平台商店上架與審核資料庫)
@@ -34,7 +34,7 @@ SoundCraft EQ 是一套基於 **WXT + React 18 + TypeScript + Web Audio API** �
 | **Spotify Web 播放器使用 Detached DOM 造成無法偵測** | 注入 MAIN 世界鉤子攔截未掛載至 DOM 的媒體原型，並透過 Bridge 自動橋接至等化器管線。 |
 | **背景靜音短影片（如 Spotify Canvas）搶佔音訊節點** | 研發發聲狀態加權演算法，發聲媒體（`audible`）享有 +800 分優先權，徹底過濾無聲影片。 |
 | **多 iframe 網站（如 YouTube 廣告、第三方外嵌）狀態覆蓋競爭** | 實作「Frame 靜默守則」與 Popup 狀態防禦鎖，無媒體之子 iframe 嚴禁發布降級覆蓋。 |
-| **分頁間預設互相干擾、全域最愛與當前預設耦合** | 採用「模式甲（多分頁完全獨立）」架構，分頁各自記憶當前預設，新分頁自動繼承全域首選。 |
+| **分頁間預設互相干擾、全域最愛與當前預設耦合** | 採用「多分頁完全獨立（Per-Tab Independence）」架構，分頁各自記憶當前預設，新分頁自動繼承全域首選。 |
 | **關閉等化器時仍佔用 CPU 運算資源** | 實作硬體級 True Bypass，關閉時訊號直接由 Source 直通揚聲器，濾波器停止處理，達到 0 額外耗能與 0ms 延遲。 |
 
 ---
@@ -49,7 +49,7 @@ SoundCraft EQ 是一套基於 **WXT + React 18 + TypeScript + Web Audio API** �
   - 滑鼠懸停即時顯現藍色虛線框與標題徽章。
   - 非破壞性事件攔截（`preventDefault`, `stopPropagation`），點擊即可繫結，不干擾原生播放。
   - 提供針對 0x0 像素純音訊（如 Spotify）的畫面底部懸浮膠囊。
-- **📑 模式甲（Per-Tab Independence）多分頁獨立狀態**：
+- **📑 多分頁獨立狀態記憶 (Per-Tab Independence)**：
   - 每個分頁在記憶體中維護各自的活躍預設與微調增益。
   - 分頁 A 選擇「Bass Cut」後，重開 Popup 依然顯示「Bass Cut」。
   - 分頁 B 保持自己的預設（如「Standard Flat」）。
@@ -151,9 +151,9 @@ Spotify Web 播放器採用獨立架構：
 
 ---
 
-## 6. 多分頁獨立狀態架構 — 模式甲
+## 6. 多分頁獨立狀態架構 (Per-Tab Preset Synchronization)
 
-### 6.1 模式甲（Per-Tab Independence）規格
+### 6.1 多分頁獨立（Per-Tab Independence）規格
 - **分頁隔離**：每個分頁維持各自的 `activePresetKey` 與增益。
 - **首選預設解耦**：全域首選（Favorite）僅用於新開分頁的預設值，切換分頁預設不會更動全域首選。
 - **微調 Dirty 狀態**：在某預設上手動微調滑桿時，預設下拉選單保持該預設名稱，但狀態標記為 Dirty，自動解鎖「另存新檔」與「還原變更」。
@@ -269,7 +269,7 @@ sequenceDiagram
 | `tests/equalizer.test.ts` | 5 頻段 BiquadFilter 建立、增益數值自動截斷（-12dB ~ +12dB）、DynamicsCompressor 峰值限制器參數、True Bypass 訊號切換直通。 |
 | `tests/mediaHelper.test.ts` | DOM 媒體維度解析、標題提取、發聲優先權加權（Audible 享有 +800 分優勢，解決 Spotify Canvas 衝突）。 |
 | `tests/storage.test.ts` | 舊版 Map 序列化遷移修復、儲存讀寫、依網域獨立記憶與預設旁路規則。 |
-| `tests/protocol.test.ts` | 多 Frame 靜默守則、Popup 狀態防禦鎖、多分頁獨立狀態同步（模式甲 Tab A / Tab B / Tab C 隔離驗證）、Dirty 狀態判定。 |
+| `tests/protocol.test.ts` | 多 Frame 靜默守則、Popup 狀態防禦鎖、多分頁獨立狀態同步（Tab A / Tab B / Tab C 隔離驗證）、Dirty 狀態判定。 |
 
 ### 10.2 建置與發行指令
 ```bash

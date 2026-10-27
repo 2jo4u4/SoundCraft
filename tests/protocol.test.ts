@@ -112,7 +112,7 @@ describe("Message Protocol & Frame Routing Seam", () => {
     expect(shouldApplyStatusUpdate("no_media", "connected", [{ id: "media-0" }])).toBe(true);
   });
 
-  describe("Per-Tab Preset State Synchronization & Mode A Isolation", () => {
+  describe("Per-Tab Preset State Synchronization & Tab Isolation", () => {
     // Helper to simulate content script state handling
     class TabContentScriptMock {
       activePresetKey: string;
@@ -173,7 +173,7 @@ describe("Message Protocol & Frame Routing Seam", () => {
       expect(tabA.eq.filters[0].gain.setTargetAtTime).toHaveBeenCalledWith(-6.0, 0, 0.01);
     });
 
-    it("should maintain per-tab preset isolation between Tab A and Tab B (Mode A)", () => {
+    it("should maintain per-tab preset isolation between Tab A and Tab B", () => {
       // 1. Both tabs open initially using global favorite "default"
       const tabA = new TabContentScriptMock("default");
       const tabB = new TabContentScriptMock("default");

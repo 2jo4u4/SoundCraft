@@ -129,7 +129,7 @@ SoundCraft EQ 是一款專為 YouTube、Bilibili、Spotify Web、Netflix、Twitc
 • 點擊即可安全繫結音訊，完全不打斷影片播放或跳轉進度條。
 • 針對 Spotify Web 等無像素背景音樂，自動生成畫面底部懸浮膠囊，一鍵點選。
 
-📑 模式甲：多分頁獨立狀態記憶
+📑 多分頁獨立狀態記憶 (Per-Tab Preset Memory & Isolation)
 每個瀏覽器分頁獨立在記憶體中維護其活躍預設與調音數值。分頁 A 切換至「Bass Cut」，完全不干擾分頁 B 的「Standard Flat」；新開分頁自動套用您的「全域首選（最愛）」。
 
 💾 專業調音預設體系
