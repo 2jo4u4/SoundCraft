@@ -20,7 +20,7 @@ describe("Chrome & Firefox Localization (i18n) Configuration", () => {
 
     for (const locale of requiredLocales) {
       const filePath = path.join(localesDir, locale, "messages.json");
-      if (!fs.existsSync(filePath)) continue;
+      expect(fs.existsSync(filePath)).toBe(true);
 
       const raw = fs.readFileSync(filePath, "utf-8");
       // Verify UTF-8 without BOM (BOM is \uFEFF)
@@ -42,12 +42,9 @@ describe("Chrome & Firefox Localization (i18n) Configuration", () => {
     const zhTwPath = path.join(localesDir, "zh_TW/messages.json");
     const zhCnPath = path.join(localesDir, "zh_CN/messages.json");
 
-    if (!fs.existsSync(zhTwPath) || !fs.existsSync(zhCnPath)) {
-      // Force failure if target files don't exist yet
-      expect(fs.existsSync(zhTwPath)).toBe(true);
-      expect(fs.existsSync(zhCnPath)).toBe(true);
-      return;
-    }
+    expect(fs.existsSync(enPath)).toBe(true);
+    expect(fs.existsSync(zhTwPath)).toBe(true);
+    expect(fs.existsSync(zhCnPath)).toBe(true);
 
     const enKeys = Object.keys(JSON.parse(fs.readFileSync(enPath, "utf-8"))).sort();
     const zhTwKeys = Object.keys(JSON.parse(fs.readFileSync(zhTwPath, "utf-8"))).sort();
@@ -55,5 +52,21 @@ describe("Chrome & Firefox Localization (i18n) Configuration", () => {
 
     expect(zhTwKeys).toEqual(enKeys);
     expect(zhCnKeys).toEqual(enKeys);
+  });
+
+  it("should copy all locales to build output directories when output exists", () => {
+    const outputDirs = [
+      path.resolve(__dirname, "../.output/chrome-mv3/_locales"),
+      path.resolve(__dirname, "../.output/firefox-mv3/_locales"),
+    ];
+
+    for (const outLocaleDir of outputDirs) {
+      if (fs.existsSync(outLocaleDir)) {
+        expect(fs.existsSync(path.join(outLocaleDir, "en/messages.json"))).toBe(true);
+        expect(fs.existsSync(path.join(outLocaleDir, "zh_TW/messages.json"))).toBe(true);
+        expect(fs.existsSync(path.join(outLocaleDir, "zh_CN/messages.json"))).toBe(true);
+        expect(fs.existsSync(path.join(outLocaleDir, "zh"))).toBe(false);
+      }
+    }
   });
 });

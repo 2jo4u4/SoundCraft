@@ -6,10 +6,10 @@
 
 ## 📑 目錄
 
-1. [基本資訊與中英文名稱](#1-基本資訊與中英文名稱)
+1. [基本資訊與多語系名稱](#1-基本資訊與多語系名稱)
 2. [短描述 / 摘要 (Summary / Short Description)](#2-短描述--摘要-summary--short-description)
 3. [完整詳細介紹 (Detailed Description) - 英文版](#3-完整詳細介紹-detailed-description---英文版)
-4. [完整詳細介紹 (Detailed Description) - 繁體中文版](#4-完整詳細介紹-detailed-description---繁體中文版)
+4. [完整詳細介紹 (Detailed Description) - 中文版 (繁體 / 簡體)](#4-完整詳細介紹-detailed-description---中文版-繁體--簡體)
 5. [權限使用理由 (Permissions Justification - 審核專用)](#5-權限使用理由-permissions-justification---審核專用)
 6. [審核人員測試備註 (Notes to Reviewer)](#6-審核人員測試備註-notes-to-reviewer)
 7. [源碼打包與審核編譯說明 (AMO Source Code Build Guide)](#7-源碼打包與審核編譯說明-amo-source-code-build-guide)
@@ -27,7 +27,8 @@
 | **版本號 (Version)** | `1.0.0` | `1.0.0` | `1.0.0` |
 | **主分類 (Category)** | Music, Audio & Video / Media | 音樂、影音與相片 | 音乐、音视频与照片 |
 | **支援瀏覽器** | Chrome, Edge, Brave, Opera, Firefox | Chrome, Edge, Brave, Opera, Firefox | Chrome, Edge, Brave, Opera, Firefox |
-| **預設語言 (default_locale)** | English (`en`) | 繁體中文 (`zh_TW`) | 簡體中文 (`zh_CN`) |
+| **語系代碼 (Locale Code)** | `en` | `zh_TW` | `zh_CN` |
+| **預設語言 (default_locale)** | `en` (全域兜底) | `en` (全域兜底) | `en` (全域兜底) |
 
 ---
 
@@ -104,7 +105,9 @@ Zero analytics, zero tracking, and zero remote network requests. All audio proce
 
 ---
 
-## 4. 完整詳細介紹 (Detailed Description) - 繁體中文版
+## 4. 完整詳細介紹 (Detailed Description) - 中文版 (繁體 / 簡體)
+
+### 4.1 繁體中文版 (Traditional Chinese - zh_TW)
 
 ```markdown
 SoundCraft EQ 是一款專為 YouTube、Bilibili、Spotify Web、Netflix、Twitch 以及各大影音串流平台打造的高效能、低延遲 5 頻段 Web Audio 等化器擴充功能。
@@ -150,6 +153,52 @@ SoundCraft EQ 是一款專為 YouTube、Bilibili、Spotify Web、Netflix、Twitc
 無任何第三方追蹤代碼、無分析腳本、無遠端伺服器請求。所有音訊處理與個人調音檔案均完全儲存於本機。
 ```
 
+### 4.2 簡體中文版 (Simplified Chinese - zh_CN)
+
+```markdown
+SoundCraft EQ 是一款专为 YouTube、Bilibili、Spotify Web、Netflix、Twitch 以及各大流媒体平台打造的高性能、低延迟 5 频段 Web Audio 均衡器扩展。
+
+基于原生 Web Audio API DSP 信号处理技术与现代化 React 18 架构，让您在浏览器中享受录音室级别的细腻音质，彻底告别传统调音常见的爆音与破音失真。
+
+==================================================
+🌟 核心功能亮点
+==================================================
+
+🎵 5 频段专业滤波器链
+精选 5 个调音黄金频段，支持 -12dB 至 +12dB 实时无爆音微调：
+• 60 Hz（重低音）：震撼包围感与极低频下潜感
+• 230 Hz（低频厚度）：温暖厚实的人声与打击乐冲击力
+• 910 Hz（人声核心）：核心中频、人声轮廓与乐器主体
+• 4 kHz（清晰度）：咬字细节、吉他扫弦与穿透力
+• 14 kHz（超高频空气感）：清脆通透的残响与空间开阔感
+
+🛡️ 透明防破音峰值限制器 (Peak Limiter)
+后端串接专业级动态压缩限制器（DynamicsCompressorNode，-0.5dB 阈值、20:1 压缩比、3ms 超快起音时间）。即使将低音或高音大幅推满，也能自动平滑突波，杜绝数码削波破音。
+
+⚡ 硬件级透明直通 (True Bypass)
+一键电源开关。关闭时音频直接从播放器直通输出至扬声器，滤波器停止运算，实现 0 运算消耗与 0 毫秒额外延迟。
+
+🎯 可视化画面元素拾取模式 (In-Page Picker)
+网页有多个播放器或广告干扰？点击“画面选取目标”即可开启全屏巡检：
+• 鼠标悬停于视频或播放器容器（YouTube, Bilibili, Spotify 等）时即时高亮蓝色虚线框并显示标签。
+• 点击即可安全绑定音频，完全不打断视频播放或跳转进度条。
+• 针对 Spotify Web 等无像素背景音乐，自动生成画面底部悬浮胶囊，一键点选。
+
+📑 多标签独立状态记忆 (Per-Tab Preset Memory & Isolation)
+每个浏览器标签独立在内存中维护其活跃预设与调音数值。标签 A 切换至“Bass Cut”，完全不干扰标签 B 的“Standard Flat”；新开标签自动套用您的“全局首选（最爱）”。
+
+💾 专业调音预设体系
+• 内置 5 款系统调音档：Standard Flat（标准均衡）、Bass Boost（低频增强）、Bass Cut（低频衰减）、Treble Boost（高频增强）、Vocal Boost（人声增强）。
+• 完整自定义操作：★ 设为首选、💾 覆盖保存、➕ 另存新档、⟲ 还原变更、🗑 删除预设。
+• 智能变动（Dirty）检测：微调滑块时自动解锁另存与还原按钮。
+
+🌐 依域名独立记忆与安全预设
+自动记录您在各网站的使用习惯（例如：YouTube 保持开启、办公网站保持关闭）。首次开启新网站默认为旁路直通（Bypassed），保护网页原生音质。
+
+🔒 100% 本地运算与纯净隐私
+无任何第三方追踪代码、无分析脚本、无远程服务器请求。所有音频处理与个人调音档案均完全保存在本地。
+```
+
 ---
 
 ## 5. 權限使用理由 (Permissions Justification - 審核專用)
@@ -164,13 +213,21 @@ SoundCraft EQ 是一款專為 YouTube、Bilibili、Spotify Web、Netflix、Twitc
 - **`host_permissions (<all_urls>)`**:
   > The extension needs to inject its content script into media-playing websites (such as YouTube, Bilibili, Spotify Web, Vimeo, Netflix, etc.) to capture `<video>` and `<audio>` elements via the Web Audio API (`createMediaElementSource`). Without host access, audio processing cannot be attached.
 
-### 繁體中文版
+### 繁體中文版 (zh_TW)
 - **`storage`**:
   > 僅用於透過 `browser.storage.local` 在使用者本機儲存自訂等化器預設、全域首選預設以及各網域獨立開關設定。絕不對外傳輸任何資料。
 - **`tabs`**:
   > 用於讀取當前分頁之網域名稱以套用依網域記憶之等化器偏好，並在 Popup 介面與分頁 Content Script 之間傳遞音訊控制指令。
 - **`主機存取權限 (<all_urls>)`**:
   > 擴充功能必須將 Content Script 注入至使用者瀏覽之影音網站（如 YouTube、Bilibili、Spotify Web 等），以透過 Web Audio API (`createMediaElementSource`) 連接視訊與音訊標籤以執行調音處理。
+
+### 簡體中文版 (zh_CN)
+- **`storage`**:
+  > 仅用于通过 `browser.storage.local` 在用户本地存储自定义均衡器预设、全局首选预设以及各域名独立开关设置。绝不对外传输任何数据。
+- **`tabs`**:
+  > 用于读取当前标签页的域名以应用依域名记忆的均衡器偏好，并在 Popup 界面与标签页 Content Script 之间传递音频控制指令。
+- **`主机访问权限 (<all_urls>)`**:
+  > 扩展程序必须将 Content Script 注入到用户浏览的音视频网站（如 YouTube、Bilibili、Spotify Web 等），以通过 Web Audio API (`createMediaElementSource`) 连接音频与视频标签以执行调音处理。
 
 ---
 
