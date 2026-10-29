@@ -322,7 +322,7 @@ equalizer-extension/
 │   ├── storage.test.ts
 │   └── mocks/audio.ts                # Web Audio API Mock (AudioContext, BiquadFilter, Compressor)
 ├── public/
-│   ├── _locales/                     # i18n 語系檔 (zh / en)
+│   ├── _locales/                     # i18n 語系檔 (en / zh_TW / zh_CN)
 │   └── icons/                        # 擴充功能圖示 (32, 64, 128px)
 ├── release/
 │   ├── logo-128.png                  # AMO / Web Store 128x128 專用高解析度 Logo

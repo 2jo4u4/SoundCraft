@@ -1,0 +1,242 @@
+{
+  "appName": {
+    "message": "SoundCraft EQ - 专业音频调音均衡器",
+    "description": "扩展名称"
+  },
+  "appDesc": {
+    "message": "为浏览器中的视频与音频提供高品质的 5 频段均衡器与自定义预设",
+    "description": "扩展描述"
+  },
+  "equalizer": {
+    "message": "均衡器",
+    "description": "均衡器"
+  },
+  "save": {
+    "message": "保存设定",
+    "description": "保存设定"
+  },
+  "reset": {
+    "message": "重置",
+    "description": "重置"
+  },
+  "medialink": {
+    "message": "重新连接音频",
+    "description": "连接音频"
+  },
+  "delete": {
+    "message": "删除均衡器设定",
+    "description": "删除均衡器设定"
+  },
+  "favorite": {
+    "message": "设为全局首选",
+    "description": "首选均衡器"
+  },
+  "saveError1": {
+    "message": "与系统默认名称重复，请变更名称",
+    "description": "与系统名称重复"
+  },
+  "saveError2": {
+    "message": "该名称已存在，请选择其他名称或先删除旧设定",
+    "description": "名称已存在"
+  },
+  "saveSuccess": {
+    "message": "保存成功",
+    "description": "新增成功"
+  },
+  "deleteSuccess": {
+    "message": "删除成功",
+    "description": "删除成功"
+  },
+  "deleteFail": {
+    "message": "删除失败（系统默认无法删除）",
+    "description": "删除失败"
+  },
+  "saveDialogTitle": {
+    "message": "命名均衡器预设",
+    "description": "命名均衡器"
+  },
+  "saveDialogField": {
+    "message": "均衡器名称",
+    "description": "均衡器名称字段"
+  },
+  "confirm": {
+    "message": "确定",
+    "description": "确定"
+  },
+  "cancel": {
+    "message": "取消",
+    "description": "取消"
+  },
+  "cencel": {
+    "message": "取消",
+    "description": "旧版兼容"
+  },
+  "help": {
+    "message": "频段说明",
+    "description": "功能说明"
+  },
+  "aboutEqualizer": {
+    "message": "频率调整导引",
+    "description": "关于均衡器"
+  },
+  "60HZ": {
+    "message": "重低音（超低频，重低音打击感）",
+    "description": "低音增益"
+  },
+  "230HZ": {
+    "message": "低音与低频和声，可感受音质厚度",
+    "description": "低音增益"
+  },
+  "910HZ": {
+    "message": "中频核心，人声与主要乐器本体",
+    "description": "中间增益"
+  },
+  "4000HZ": {
+    "message": "高频前段，人声齿音与乐器清晰度",
+    "description": "高音增益"
+  },
+  "14000HZ": {
+    "message": "超高频空气感与细节泛音",
+    "description": "高音增益"
+  },
+  "statusConnected": {
+    "message": "音频已连接",
+    "description": "状态指示器：已连接"
+  },
+  "statusNoMedia": {
+    "message": "未检测到播放中的媒体",
+    "description": "状态指示器：未找到媒体"
+  },
+  "statusCorsRestricted": {
+    "message": "音频受 CORS 跨域限制",
+    "description": "状态指示器：受限"
+  },
+  "eqPower": {
+    "message": "均衡器开关",
+    "description": "均衡器总开关"
+  },
+  "eqEnabled": {
+    "message": "启动均衡器",
+    "description": "开关开启"
+  },
+  "eqBypassed": {
+    "message": "关闭均衡器",
+    "description": "开关关闭"
+  },
+  "favoriteBtn": {
+    "message": "首选",
+    "description": "首选按钮文本"
+  },
+  "updateBtn": {
+    "message": "保存",
+    "description": "覆盖保存按钮文本"
+  },
+  "saveAsBtn": {
+    "message": "另存",
+    "description": "另存按钮文本"
+  },
+  "revertBtn": {
+    "message": "还原",
+    "description": "还原按钮文本"
+  },
+  "deleteBtn": {
+    "message": "删除",
+    "description": "删除按钮文本"
+  },
+  "updatePreset": {
+    "message": "保存变更 (覆盖)",
+    "description": "覆盖保存当前预设"
+  },
+  "saveAsNew": {
+    "message": "另存为新预设",
+    "description": "另存为全新预设"
+  },
+  "revertChanges": {
+    "message": "还原至默认值",
+    "description": "还原滑块至默认"
+  },
+  "rescanMedia": {
+    "message": "重新检测 / 切换下一个音源",
+    "description": "重整或轮替媒体"
+  },
+  "defaultEqualize": {
+    "message": "标准均衡 (系统)",
+    "description": "默认均衡器"
+  },
+  "defaultEuqalize": {
+    "message": "标准均衡 (系统)",
+    "description": "旧版兼容 key"
+  },
+  "lowEnhance": {
+    "message": "低频增强 (系统)",
+    "description": "低频增强"
+  },
+  "highEnhance": {
+    "message": "高频增强 (系统)",
+    "description": "高频增强"
+  },
+  "heightEnhance": {
+    "message": "高频增强 (系统)",
+    "description": "旧版兼容 key"
+  },
+  "volumeEnhance": {
+    "message": "音量增强 (系统)",
+    "description": "音量增强"
+  },
+  "lowReduce": {
+    "message": "低频衰减 (系统)",
+    "description": "低频衰减"
+  },
+  "highReduce": {
+    "message": "高频衰减 (系统)",
+    "description": "高频衰减"
+  },
+  "heightReduce": {
+    "message": "高频衰减 (系统)",
+    "description": "旧版兼容 key"
+  },
+  "pickFromPage": {
+    "message": "点击画面选取目标",
+    "description": "手动点击网页元素选取目标"
+  },
+  "autoSelectBest": {
+    "message": "自动最佳推荐",
+    "description": "自动选取最佳音频"
+  },
+  "discoveredMediaTitle": {
+    "message": "已检测的音视频清单",
+    "description": "检测到的媒体列表标题"
+  },
+  "pickerOverlayHint": {
+    "message": "点击画面以绑定均衡器 (按 ESC 取消)",
+    "description": "画面选取覆盖层提示"
+  },
+  "pickerSuccessToast": {
+    "message": "已成功绑定音频目标！",
+    "description": "画面选取成功通知"
+  },
+  "floatingSpotifyHint": {
+    "message": "🎵 检测到背景播放音频 (点此快速绑定)",
+    "description": "悬浮背景音乐提示"
+  },
+  "mediaAudible": {
+    "message": "发声中",
+    "description": "媒体状态：发声中"
+  },
+  "mediaPlaying": {
+    "message": "播放中",
+    "description": "媒体状态：播放中"
+  },
+  "mediaPaused": {
+    "message": "已暂停",
+    "description": "媒体状态：已暂停"
+  },
+  "mediaMuted": {
+    "message": "静音",
+    "description": "媒体状态：静音"
+  },
+  "mediaRecommended": {
+    "message": "最佳推荐",
+    "description": "最佳推荐标记"
+  }
+}

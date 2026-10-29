@@ -18,16 +18,16 @@
 
 ---
 
-## 1. 基本資訊與中英文名稱
+## 1. 基本資訊與多語系名稱
 
-| 項目 | 英文 (en) | 繁體中文 (zh-TW) |
-| :--- | :--- | :--- |
-| **擴充功能名稱 (Name)** | `SoundCraft EQ - Audio Equalizer` | `SoundCraft EQ - 專業音訊調音等化器` |
-| **套件 ID (Firefox AMO)** | `soundcraft-eq@jay.addons.mozilla.org` | 同左 |
-| **版本號 (Version)** | `1.0.0` | `1.0.0` |
-| **主分類 (Category)** | Music, Audio & Video / Media | 音樂、影音與相片 |
-| **支援瀏覽器** | Chrome, Edge, Brave, Opera, Firefox | Chrome, Edge, Brave, Opera, Firefox |
-| **預設語言** | English (en) | 繁體中文 (zh-TW) |
+| 項目 | 英文 (en) | 繁體中文 (zh_TW) | 簡體中文 (zh_CN) |
+| :--- | :--- | :--- | :--- |
+| **擴充功能名稱 (Name)** | `SoundCraft EQ - Audio Equalizer` | `SoundCraft EQ - 專業音訊調音等化器` | `SoundCraft EQ - 专业音频调音均衡器` |
+| **套件 ID (Firefox AMO)** | `soundcraft-eq@jay.addons.mozilla.org` | 同左 | 同左 |
+| **版本號 (Version)** | `1.0.0` | `1.0.0` | `1.0.0` |
+| **主分類 (Category)** | Music, Audio & Video / Media | 音樂、影音與相片 | 音乐、音视频与照片 |
+| **支援瀏覽器** | Chrome, Edge, Brave, Opera, Firefox | Chrome, Edge, Brave, Opera, Firefox | Chrome, Edge, Brave, Opera, Firefox |
+| **預設語言 (default_locale)** | English (`en`) | 繁體中文 (`zh_TW`) | 簡體中文 (`zh_CN`) |
 
 ---
 
@@ -35,17 +35,23 @@
 
 > **字數限制提醒**：Firefox AMO 限制 250 字元以內；Chrome Web Store 限制 132 字元以內。
 
-### 英文版 (English)
+### 英文版 (English - en)
 - **AMO 摘要 (Summary, 250 字元)**:
   > High-fidelity 5-band Web Audio equalizer with transparent peak limiter, true bypass, per-tab preset isolation, and intelligent in-page media picker for YouTube, Spotify, and streaming sites.
 - **Chrome Web Store 簡短說明 (Short Description, 132 字元)**:
   > High-fidelity 5-band Web Audio EQ with peak limiter, true bypass, per-tab memory, and media picker for YouTube & streaming.
 
-### 繁體中文版 (Traditional Chinese)
+### 繁體中文版 (Traditional Chinese - zh_TW)
 - **AMO 摘要 (Summary, 250 字元)**:
   > 專為影音串流打造的高音質 5 頻段 Web Audio 等化器。具備防破音峰值限制器、硬體級透明直通、多分頁獨立記憶，以及智慧畫面元素拾取功能。
 - **Chrome Web Store 簡短說明 (Short Description, 132 字元)**:
   > 高音質 5 頻段 Web Audio 等化器，內建防破音限制器、0ms 旁路直通、多分頁獨立記憶與畫面拾取功能。
+
+### 簡體中文版 (Simplified Chinese - zh_CN)
+- **AMO 摘要 (Summary, 250 字元)**:
+  > 专为流媒体打造的高品质 5 频段 Web Audio 均衡器。具备防破音峰值限制器、硬件级透明直通、多标签独立记忆，以及智能画面元素拾取功能。
+- **Chrome Web Store 简短说明 (Short Description, 132 字元)**:
+  > 高品质 5 频段 Web Audio 均衡器，内置防破音限制器、0ms 旁路直通、多标签独立记忆与画面选取功能。
 
 ---
 
