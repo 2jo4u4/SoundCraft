@@ -46,7 +46,7 @@ npm run compile
 
 ### 打包發布檔 (Zip)
 ```bash
-npm run zip           # 產出 Chrome Web Store zip (.output/equalizer-extension-1.0.0-chrome.zip)
+npm run zip           # 產出 Chrome Web Store zip (.output/equalizer-extension-1.1.0-chrome.zip)
 npm run zip:firefox   # 產出 Firefox AMO zip 與審核源碼包
 ```
 

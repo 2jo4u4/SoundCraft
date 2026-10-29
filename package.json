@@ -1,6 +1,6 @@
 {
   "name": "equalizer-extension",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "瀏覽器音訊等化器擴充功能",
   "type": "module",
   "scripts": {

@@ -287,9 +287,9 @@ cmd /c "npm run zip:firefox && npm run zip"
 ```
 
 產物輸出目錄：
-- `.output/equalizer-extension-1.0.0-chrome.zip`（Chrome Web Store 上架包，約 161 KB）
-- `.output/equalizer-extension-1.0.0-firefox.zip`（Firefox AMO 簽署發行包，約 161 KB）
-- `.output/equalizer-extension-1.0.0-sources.zip`（Firefox AMO 開源審核源碼包）
+- `.output/equalizer-extension-1.1.0-chrome.zip`（Chrome Web Store 上架包）
+- `.output/equalizer-extension-1.1.0-firefox.zip`（Firefox AMO 簽署發行包）
+- `.output/equalizer-extension-1.1.0-sources.zip`（Firefox AMO 開源審核源碼包）
 
 ---
 

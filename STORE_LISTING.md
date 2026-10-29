@@ -8,13 +8,14 @@
 
 1. [基本資訊與多語系名稱](#1-基本資訊與多語系名稱)
 2. [短描述 / 摘要 (Summary / Short Description)](#2-短描述--摘要-summary--short-description)
-3. [完整詳細介紹 (Detailed Description) - 英文版](#3-完整詳細介紹-detailed-description---英文版)
-4. [完整詳細介紹 (Detailed Description) - 中文版 (繁體 / 簡體)](#4-完整詳細介紹-detailed-description---中文版-繁體--簡體)
-5. [權限使用理由 (Permissions Justification - 審核專用)](#5-權限使用理由-permissions-justification---審核專用)
-6. [審核人員測試備註 (Notes to Reviewer)](#6-審核人員測試備註-notes-to-reviewer)
-7. [源碼打包與審核編譯說明 (AMO Source Code Build Guide)](#7-源碼打包與審核編譯說明-amo-source-code-build-guide)
-8. [商店展示截圖文案 (Screenshot Captions 1280x800)](#8-商店展示截圖文案-screenshot-captions-1280x800)
-9. [隱私與資料收集宣告 (Privacy & Data Declarations)](#9-隱私與資料收集宣告-privacy--data-declarations)
+3. [版本新功能摘要 (What's New in v1.1.0) - 商店更新欄位專用](#3-版本新功能摘要-whats-new-in-v110---商店更新欄位專用)
+4. [完整詳細介紹 (Detailed Description) - 英文版](#4-完整詳細介紹-detailed-description---英文版)
+5. [完整詳細介紹 (Detailed Description) - 中文版 (繁體 / 簡體)](#5-完整詳細介紹-detailed-description---中文版-繁體--簡體)
+6. [權限使用理由 (Permissions Justification - 審核專用)](#6-權限使用理由-permissions-justification---審核專用)
+7. [審核人員測試備註 (Notes to Reviewer)](#7-審核人員測試備註-notes-to-reviewer)
+8. [源碼打包與審核編譯說明 (AMO Source Code Build Guide)](#8-源碼打包與審核編譯說明-amo-source-code-build-guide)
+9. [商店展示截圖文案 (Screenshot Captions 1280x800)](#9-商店展示截圖文案-screenshot-captions-1280x800)
+10. [隱私與資料收集宣告 (Privacy & Data Declarations)](#10-隱私與資料收集宣告-privacy--data-declarations)
 
 ---
 
@@ -24,7 +25,7 @@
 | :--- | :--- | :--- | :--- |
 | **擴充功能名稱 (Name)** | `SoundCraft EQ - Audio Equalizer` | `SoundCraft EQ - 專業音訊調音等化器` | `SoundCraft EQ - 专业音频调音均衡器` |
 | **套件 ID (Firefox AMO)** | `soundcraft-eq@jay.addons.mozilla.org` | 同左 | 同左 |
-| **版本號 (Version)** | `1.0.0` | `1.0.0` | `1.0.0` |
+| **版本號 (Version)** | `1.1.0` | `1.1.0` | `1.1.0` |
 | **主分類 (Category)** | Music, Audio & Video / Media | 音樂、影音與相片 | 音乐、音视频与照片 |
 | **支援瀏覽器** | Chrome, Edge, Brave, Opera, Firefox | Chrome, Edge, Brave, Opera, Firefox | Chrome, Edge, Brave, Opera, Firefox |
 | **語系代碼 (Locale Code)** | `en` | `zh_TW` | `zh_CN` |
@@ -56,7 +57,40 @@
 
 ---
 
-## 3. 完整詳細介紹 (Detailed Description) - 英文版
+## 3. 版本新功能摘要 (What's New in v1.1.0) - 商店更新欄位專用
+
+> 商店上傳新版本時，後台「What's new in this version / 此版本新功能」欄位直接複製對應語系：
+
+### 英文版 (English)
+```text
+What's New in v1.1.0:
+• ✨ Per-Tab Preset Memory: Each tab now independently preserves its active preset and custom gain adjustments without altering your global favorite default.
+• 🌐 Multi-Language Compliance: Restructured localization supporting Traditional Chinese (zh_TW) and Simplified Chinese (zh_CN) per Chrome Web Store standards.
+• ⚡ Audio Pipeline Stability: Optimized YouTube SPA auto-reconnect and Spotify Web background music audibility priority scoring.
+• 🛡️ Frame Routing Safety: Enhanced multi-frame silence guard preventing unneeded status downgrades in nested iframes.
+```
+
+### 繁體中文版 (Traditional Chinese - zh_TW)
+```text
+v1.1.0 更新內容：
+• ✨ 多分頁獨立狀態記憶：各分頁現在完全獨立記憶其目前使用的等化器預設與微調數值，切換分頁不會互相干擾，且不再意外覆蓋全域首選（最愛）。
+• 🌐 Chrome 商店語系規範全面支援：重整語系架構，完整支援台灣繁體中文（zh_TW）與簡體中文（zh_CN）。
+• ⚡ 音訊引擎穩定性優化：強化 YouTube SPA 換頁自動重掛載與 Spotify 背景音樂的發聲優先權判定。
+• 🛡️ 多 Frame 通訊防禦：強化 iframe 靜默防護，杜絕巢狀廣告頁面干擾主視訊等化狀態。
+```
+
+### 簡體中文版 (Simplified Chinese - zh_CN)
+```text
+v1.1.0 更新内容：
+• ✨ 多标签独立状态记忆：各个标签页现在完全独立记忆其当前使用的均衡器预设与微调数值，切换标签不会相互干扰，且不再意外覆盖全局首选。
+• 🌐 Chrome 商店语言规范全面支持：重构语言架构，完整支持简体中文（zh_CN）与繁体中文（zh_TW）。
+• ⚡ 音频引擎稳定性优化：强化 YouTube SPA 切页自动重挂载与 Spotify 背景音乐的发声优先级判定。
+• 🛡️ 多 Frame 通讯防御：强化 iframe 静默防护，杜绝嵌套广告页面干扰主视频均衡状态。
+```
+
+---
+
+## 4. 完整詳細介紹 (Detailed Description) - 英文版
 
 ```markdown
 SoundCraft EQ is a high-fidelity, ultra-low-latency 5-band Web Audio equalizer browser extension engineered for YouTube, Bilibili, Spotify Web, Netflix, Twitch, and all modern streaming media.
@@ -105,7 +139,7 @@ Zero analytics, zero tracking, and zero remote network requests. All audio proce
 
 ---
 
-## 4. 完整詳細介紹 (Detailed Description) - 中文版 (繁體 / 簡體)
+## 5. 完整詳細介紹 (Detailed Description) - 中文版 (繁體 / 簡體)
 
 ### 4.1 繁體中文版 (Traditional Chinese - zh_TW)
 
@@ -201,7 +235,7 @@ SoundCraft EQ 是一款专为 YouTube、Bilibili、Spotify Web、Netflix、Twitc
 
 ---
 
-## 5. 權限使用理由 (Permissions Justification - 審核專用)
+## 6. 權限使用理由 (Permissions Justification - 審核專用)
 
 > 上架 Chrome Web Store 及 Firefox AMO 時，請直接複製以下對應中英文：
 
@@ -231,7 +265,7 @@ SoundCraft EQ 是一款专为 YouTube、Bilibili、Spotify Web、Netflix、Twitc
 
 ---
 
-## 6. 審核人員測試備註 (Notes to Reviewer)
+## 7. 審核人員測試備註 (Notes to Reviewer)
 
 > 填寫於 Firefox AMO 的「Notes to Reviewer」或 Chrome Web Store 的「Testing Instructions」：
 
@@ -261,7 +295,7 @@ Thank you for reviewing SoundCraft EQ!
 
 ---
 
-## 7. 源碼打包與審核編譯說明 (AMO Source Code Build Guide)
+## 8. 源碼打包與審核編譯說明 (AMO Source Code Build Guide)
 
 > Firefox AMO 要求上架包含預編譯代碼的擴充功能時提供源碼與重現指南：
 
@@ -289,12 +323,12 @@ npm test
 npm run build:firefox
 
 # 產物將位於: .output/firefox-mv3/
-# 打包 ZIP 產物: .output/equalizer-extension-1.0.0-firefox.zip
+# 打包 ZIP 產物: .output/equalizer-extension-1.1.0-firefox.zip
 ```
 
 ---
 
-## 8. 商店展示截圖文案 (Screenshot Captions 1280x800)
+## 9. 商店展示截圖文案 (Screenshot Captions 1280x800)
 
 本專案於 `release/portfolio_screenshots/` 目錄下提供 5 張符合商店規格之 1280×800 實機截圖：
 
@@ -308,7 +342,7 @@ npm run build:firefox
 
 ---
 
-## 9. 隱私與資料收集宣告 (Privacy & Data Declarations)
+## 10. 隱私與資料收集宣告 (Privacy & Data Declarations)
 
 ### Chrome Web Store 隱私權問卷選項填寫指引
 - **Single Purpose (單一用途說明)**:
